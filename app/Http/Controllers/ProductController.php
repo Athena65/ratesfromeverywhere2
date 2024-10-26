@@ -30,22 +30,22 @@ class ProductController extends Controller
     // Ürünü kaydeder
     public function store(Request $request)
     {
-        // Veriyi doğrula
+        // Validate the data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Ürün resmi
-            'site_rating' => 'nullable|numeric|min:0|max:5', // Site içi değerlendirme
-            'global_rating' => 'nullable|numeric|min:0|max:5', // Genel değerlendirme
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
+            'site_rating' => 'nullable|numeric|min:0|max:5',
+            'global_rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
-        // Ürün resmini kaydet
+        // Save the product image to storage/app/public/products
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // Yeni ürünü oluştur
+        // Create the product and save the image path
         Product::create([
             'name' => $request->name,
             'description' => $request->description,
@@ -54,9 +54,9 @@ class ProductController extends Controller
             'global_rating' => $request->global_rating ?? 0,
         ]);
 
-        // Başarı mesajıyla geri yönlendir
-        return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla güncellendi.');
+        return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla eklendi.');
     }
+
     // urun duzenleme fonksiyonu
     public function edit(Product $product)
     {

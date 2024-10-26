@@ -29,7 +29,7 @@ class LoginController extends Controller
             'email' => 'Girdiğiniz bilgiler yanlış.',
         ]);
     }
-
+ //commit pushdeneme
     // Logout işlemi
     public function logout()
     {
