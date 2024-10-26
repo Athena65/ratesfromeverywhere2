@@ -1,0 +1,37 @@
+# .env dosyaları
+.env
+.env.*               # Farklı ortam dosyaları (örneğin, .env.testing gibi)
+
+# Composer bağımlılıkları
+/vendor
+
+# Node bağımlılıkları
+/node_modules
+
+# Geçici dosyalar
+/storage/*.key       # Genellikle şifreleme anahtarları buradadır
+/storage/app/public  # Kullanıcı tarafından yüklenen dosyalar
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+
+# Laravel Cache ve Log dosyaları
+/storage/logs
+/bootstrap/cache/*.php
+
+# IDE ve Editör Geçici Dosyaları
+.idea                # PhpStorm dosyaları
+.vscode              # VSCode ayarları
+*.sublime-project
+*.sublime-workspace
+
+# İşletim Sistemi Dosyaları
+.DS_Store            # MacOS
+Thumbs.db            # Windows
+
+# Geçici ve Yedek Dosyalar
+*.bak
+*.tmp
+*.swp
+*.swm
