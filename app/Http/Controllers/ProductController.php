@@ -39,13 +39,13 @@ class ProductController extends Controller
             'global_rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
-        // Save the product image to storage/app/public/products
+        // resmi buraya kaydeder :  storage/app/public/products
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // Create the product and save the image path
+        // urunu olstur ve kaydet
         Product::create([
             'name' => $request->name,
             'description' => $request->description,
