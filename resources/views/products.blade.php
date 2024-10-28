@@ -18,7 +18,7 @@
                             <div class="d-flex align-items-center">
                                 <small><strong>RFE Rating</strong></small>&nbsp;
                                 <i class="fas fa-star rating-icon"></i>
-                                <span class="fw-bold ms-1">{{ $product->site_rating }}</span><span class="text-muted">/5</span>
+                                <span class="fw-bold ms-1">{{ $product->site_rating }}</span><span class="text-muted"></span>
                             </div>
                             <div class="d-flex flex-column align-items-center" onclick="rateProduct({{ $product->id }})">
                                 <small><strong>Your Rating</strong></small>
@@ -46,3 +46,6 @@
         @endforelse
     </div>
 </div>
+<!-- rate modal css -->
+@vite('resources/css/rate_modal.css')
+

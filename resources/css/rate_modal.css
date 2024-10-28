@@ -1,0 +1,68 @@
+/* Custom styles for the modal */
+.rating-modal .modal-content {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 20px;
+    border: none;
+}
+
+.rating-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.rating-modal .modal-header .btn-close {
+    color: #fff;
+}
+
+.rating-modal .star-icon {
+    font-size: 4rem;
+    color: #5a9bf6; /* Light blue color */
+    margin-top: -40px;
+}
+
+.rating-modal .modal-body h6 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+
+.rating-modal .rating-stars i {
+    font-size: 2rem;
+    color: #ccc; /* Gray color for unselected stars */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.rating-modal .rating-stars i.selected, .rating-modal .rating-stars i:hover {
+    color: #5a9bf6; /* Light blue color for selected stars */
+}
+
+.rating-modal .modal-footer {
+    border-top: none;
+    padding-top: 0;
+}
+
+.rating-modal .btn-rate {
+    background-color: #333;
+    color: #666;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.rating-modal .btn-rate:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Style for rating display text */
+#selectedRatingDisplay {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: blue; /* Default color for rating text */
+}

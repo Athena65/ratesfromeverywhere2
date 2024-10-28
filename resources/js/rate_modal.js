@@ -4,6 +4,11 @@ let selectedRating = 0;
 // Function to open the rating modal with the product name
 window.openRatingModal = function(productName) {
     document.getElementById('modalProductName').innerText = productName;
+    document.getElementById('selectedRatingDisplay').innerText = ''; // Clear previous rating display
+    selectedRating = 0; // Reset rating
+    document.querySelectorAll('.rating-stars i').forEach(star => {
+        star.classList.remove('selected'); // Reset star selection
+    });
     var ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'), {});
     ratingModal.show();
 };
@@ -13,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.rating-stars i').forEach(star => {
         star.addEventListener('click', function() {
             selectedRating = this.getAttribute('data-rating');
+            document.getElementById('selectedRatingDisplay').innerHTML = `<span style="color: yellow; font-size: 1.7rem;">${selectedRating}</span>`; // Display selected rating
             document.querySelectorAll('.rating-stars i').forEach(s => {
                 s.classList.remove('selected');
                 if (s.getAttribute('data-rating') <= selectedRating) {
@@ -41,13 +47,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Function to submit the rating
+// Function to submit the rating and close the modal
 window.submitRating = function() {
     if (selectedRating > 0) {
-        alert(`You rated this product ${selectedRating} out of 5 stars!`);
-        var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
-        ratingModal.hide();
+        // Show confirmation message with the rating in yellow
+        document.getElementById('selectedRatingDisplay').innerHTML = `Your rating: <span style="color: yellow; font-size: 1.5rem;">${selectedRating}</span> has been submitted!`;
+
+        // Close the modal after a brief delay
+        setTimeout(() => {
+            var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+            ratingModal.hide();
+        }, 1000); // Delay to allow user to see the message before modal closes
     } else {
-        alert('Please select a rating before submitting.');
+        // Display error message if no rating is selected
+        document.getElementById('selectedRatingDisplay').innerText = 'Please select a rating.';
+        document.getElementById('selectedRatingDisplay').style.color = 'red'; // Set color to red for error
     }
 };
