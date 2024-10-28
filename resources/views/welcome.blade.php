@@ -20,11 +20,13 @@
 <body>
 <!-- Header -->
 <header class="d-flex justify-content-between align-items-center p-3 bg-primary text-white">
-    <div class="logo">
-        <a href="/" title="Ana Sayfa">
+    <div class="logo d-flex align-items-center">
+        <a href="/" title="Home">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s" alt="Logo" style="height: 50px;">
         </a>
+        <h1 class="ms-3 mb-0" style="font-size: 1.5rem; color: #333;">Rates From Everywhere</h1>
     </div>
+
 
     <div class="auth-button">
         @auth
