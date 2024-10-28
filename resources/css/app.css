@@ -1,0 +1,99 @@
+/* Minimal custom styles */
+.rating-icon {
+    color: #ffc107; /* Gold color for filled star */
+}
+
+.user-rating {
+    color: #007bff;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.user-rating:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+}
+
+/* Global Rating 5-star display */
+.stars-outer {
+    position: relative;
+    display: inline-block;
+    color: #ccc; /* Empty star color */
+}
+
+.stars-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #ffc107; /* Filled star color */
+}
+
+.stars-outer::before,
+.stars-inner::before {
+    content: "\f005 \f005 \f005 \f005 \f005"; /* 5 stars */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/*rate_modal.blade.php*/
+/* Custom styles for the minimalist modal */
+.rating-modal .modal-content {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 20px;
+    border: none;
+}
+
+.rating-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.rating-modal .modal-header .star-icon {
+    font-size: 4rem;
+    color: #5a9bf6; /* Light blue color */
+    margin-top: -40px;
+}
+
+.rating-modal .modal-body h6 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+
+.rating-modal .rating-stars i {
+    font-size: 2rem;
+    color: #ccc; /* Gray color for unselected stars */
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.rating-modal .rating-stars i.selected, .rating-modal .rating-stars i:hover {
+    color: #5a9bf6; /* Light blue color for selected stars */
+}
+
+.rating-modal .modal-footer {
+    border-top: none;
+    padding-top: 0;
+}
+
+.rating-modal .btn-rate {
+    background-color: #333;
+    color: #666;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.rating-modal .btn-rate:hover {
+    background-color: #555;
+    color: #fff;
+}
