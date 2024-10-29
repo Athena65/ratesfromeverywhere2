@@ -22,7 +22,7 @@
                             </div>
                             <div class="d-flex flex-column align-items-center" onclick="rateProduct({{ $product->id }})">
                                 <small><strong>Your Rating</strong></small>
-                                <div class="user-rating px-2 py-1 d-flex align-items-center" onclick="openRatingModal('{{ $product->name }}')">
+                                <div class="user-rating px-2 py-1 d-flex align-items-center" onclick="openRatingModal('{{ $product->name }}', {{ $product->id }})">
                                     <i class="far fa-star me-1"></i> Rate
                                 </div>
                             </div>
@@ -46,6 +46,7 @@
         @endforelse
     </div>
 </div>
+
 <!-- rate modal css -->
 @vite('resources/css/rate_modal.css')
 

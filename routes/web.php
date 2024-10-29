@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -39,3 +40,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 });
+
+//Product rate
+Route::post('/rate-product', [RatingController::class, 'rateProduct'])->name('rate.product');

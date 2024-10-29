@@ -8,14 +8,9 @@
     <!-- yildizlar icin -->
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* urun resmi duzeltmesi */
-        .card-img-top {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-    </style>
+
+    <!-- ajax csrf korumasi -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 <!-- Header -->

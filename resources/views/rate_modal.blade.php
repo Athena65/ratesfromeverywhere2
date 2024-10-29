@@ -30,7 +30,10 @@
 <!-- Bootstrap and Font Awesome Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-
+<!--  -->
+<script>
+    const rateProductUrl = @json(route('rate.product'));
+</script>
 <!-- Include rate_modal.js using Vite -->
 @vite('resources/js/rate_modal.js')
 
