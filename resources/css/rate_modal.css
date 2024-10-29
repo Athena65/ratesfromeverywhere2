@@ -18,9 +18,9 @@
 }
 
 .rating-modal .star-icon {
-    font-size: 4rem;
-    color: #5a9bf6; /* Light blue color */
-    margin-top: -40px;
+    font-size: 3rem;
+    color: #ffc107; /* Gold color */
+    margin-top: -20px;
 }
 
 .rating-modal .modal-body h6 {
@@ -36,7 +36,7 @@
 }
 
 .rating-modal .rating-stars i.selected, .rating-modal .rating-stars i:hover {
-    color: #5a9bf6; /* Light blue color for selected stars */
+    color: #ffc107; /* Gold color for selected stars */
 }
 
 .rating-modal .modal-footer {
@@ -45,18 +45,19 @@
 }
 
 .rating-modal .btn-rate {
-    background-color: #333;
-    color: #666;
+    background-color: #5a9bf6; /* Light blue */
+    color: #fff;
     border: none;
     width: 100%;
     padding: 10px;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .rating-modal .btn-rate:hover {
-    background-color: #555;
+    background-color: #4b89dc;
     color: #fff;
 }
 
@@ -64,5 +65,5 @@
 #selectedRatingDisplay {
     font-size: 1.2rem;
     font-weight: bold;
-    color: blue; /* Default color for rating text */
+    color: #ffc107; /* Altın sarısı renk */
 }

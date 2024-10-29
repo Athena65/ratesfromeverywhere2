@@ -79,9 +79,10 @@ window.removeRating = function () {
                     if (ratingModal) {
                         ratingModal.hide();
                     }
-
                     // Overlay'i manuel olarak kaldır
-                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    setTimeout(() => {
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                    }, 100); // Delay to ensure backdrop is removed after modal is hidden
 
                     // Kullanıcının ürün kartındaki rating bölümünü kaldır
                     const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
@@ -122,9 +123,10 @@ window.submitRating = function () {
                         if (ratingModal) {
                             ratingModal.hide();
                         }
-
                         // Overlay'i manuel olarak kaldır
-                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                        setTimeout(() => {
+                            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                        }, 100); // Delay to ensure backdrop is removed after modal is hidden
 
                         // Kullanıcının ürün kartındaki rating bölümünü güncelle
                         const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
@@ -155,5 +157,29 @@ window.closeModal = function () {
         ratingModal.hide();
     }
     // Overlay'i manuel olarak kaldır
-    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    setTimeout(() => {
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    }, 100); // Delay to ensure backdrop is removed after modal is hidden
 }
+// Listen for modal hide event to remove overlay
+document.getElementById('ratingModal').addEventListener('hide.bs.modal', () => {
+    setTimeout(() => {
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    }, 100); // Delay to ensure backdrop is removed after modal is hidden
+});
+//disable hover when modal opent
+// Modal açıldığında tüm kartlara "card-hover-disabled" sınıfını ekle
+const ratingModal = document.getElementById('ratingModal');
+
+ratingModal.addEventListener('show.bs.modal', () => {
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.add('card-hover-disabled');
+    });
+});
+
+// Modal kapandığında "card-hover-disabled" sınıfını kaldır
+ratingModal.addEventListener('hidden.bs.modal', () => {
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.remove('card-hover-disabled');
+    });
+});
