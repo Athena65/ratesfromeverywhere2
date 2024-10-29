@@ -1,9 +1,11 @@
 <!-- Rating Modal -->
-<div class="modal fade rating-modal" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+<div class="modal fade rating-modal" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        onclick="closeModal()" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!-- Display selected rating -->
@@ -23,6 +25,11 @@
 
                 <!-- Rate button -->
                 <button class="btn-rate" onclick="submitRating()">Rate</button>
+
+                <!-- Remove rating button -->
+                <button class="btn-remove-rating mt-2" onclick="removeRating()"
+                        style="color: blue; background: none; border: none;">Remove rating
+                </button>
             </div>
         </div>
     </div>
@@ -30,10 +37,13 @@
 <!-- Bootstrap and Font Awesome Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-<!--  -->
+<!-- Rate URL'leri tanımlayın -->
 <script>
-    const rateProductUrl = @json(route('rate.product'));
+    window.rateProductUrl = @json(route('rate.product'));
+    window.removeRatingUrl = @json(route('remove.rating'));
 </script>
-<!-- Include rate_modal.js using Vite -->
+
+<!-- rate_modal.js dosyasını yükleyin -->
 @vite('resources/js/rate_modal.js')
+
 

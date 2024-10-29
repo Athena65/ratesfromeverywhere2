@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\UserRating;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -11,8 +13,17 @@ class ProductController extends Controller
     // Ana sayfada ürünleri listelemek için
     public function index()
     {
-        $products = Product::all(); // Tüm ürünleri al
-        return view('welcome', compact('products')); // home view dosyasına yönlendir
+        $userId = Auth::id(); // Mevcut kullanıcı ID'si
+        $products = Product::all();
+
+        // Her ürün için kullanıcının verdiği puanı ilişkilendirin
+        foreach ($products as $product) {
+            $product->user_rating = UserRating::where('product_id', $product->id)
+                ->where('user_id', $userId)
+                ->value('user_rate');
+        }
+
+        return view('welcome', compact('products'));
     }
     // Ürün oluşturma formunu gösterir
     public function create()

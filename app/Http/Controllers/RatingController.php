@@ -17,12 +17,28 @@ class RatingController extends Controller
 
         $userId = Auth::id();
 
-        // Eğer değerlendirme varsa güncelle, yoksa yeni kayıt oluştur
+        // Eğer değerlendirme varsa güncelle, yoksa yeni kayıt oluştur (uesr_rates tablosuna)
         $rating = UserRating::updateOrCreate(
             ['user_id' => $userId, 'product_id' => $request->product_id],
             ['user_rate' => $request->user_rate]
         );
 
         return response()->json(['success' => true, 'message' => 'Rating saved successfully!']);
+    }
+    // rati i kaldirmak için
+    public function removeRating(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $userId = Auth::id();
+
+        // Belirtilen ürün için kullanıcıya ait değerlendirmeyi sil
+        UserRating::where('user_id', $userId)
+            ->where('product_id', $request->product_id)
+            ->delete();
+
+        return response()->json(['success' => true, 'message' => 'Rating removed successfully!']);
     }
 }

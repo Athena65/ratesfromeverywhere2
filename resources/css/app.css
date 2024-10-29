@@ -2,7 +2,11 @@
 .rating-icon {
     color: #ffc107; /* Gold color for filled star */
 }
-
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
 .user-rating {
     color: #007bff;
     cursor: pointer;

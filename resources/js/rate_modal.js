@@ -1,9 +1,18 @@
+// Bu tanımları JavaScript içinde doğrudan kullanın
+const rateProductUrl = window.rateProductUrl;
+const removeRatingUrl = window.removeRatingUrl;
 // Initialize the rating value and product ID
 let selectedRating = 0;
 let selectedProductId = null;
 
+// Global rateProduct function
+window.rateProduct = function (productId) {
+    selectedProductId = productId;
+    openRatingModal("Product Name", productId);
+}
+
 // Function to open the rating modal with the product name and product ID
-window.openRatingModal = function(productName, productId) {
+window.openRatingModal = function (productName, productId) {
     document.getElementById('modalProductName').innerText = productName;
     document.getElementById('selectedRatingDisplay').innerText = ''; // Clear previous rating display
     selectedRating = 0; // Reset rating
@@ -18,7 +27,7 @@ window.openRatingModal = function(productName, productId) {
 // Function to handle star selection with hover effect
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.rating-stars i').forEach(star => {
-        star.addEventListener('click', function() {
+        star.addEventListener('click', function () {
             selectedRating = this.getAttribute('data-rating');
             document.getElementById('selectedRatingDisplay').innerHTML = `<span style="color: yellow; font-size: 1.7rem;">${selectedRating}</span>`; // Display selected rating
             document.querySelectorAll('.rating-stars i').forEach(s => {
@@ -29,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        star.addEventListener('mouseover', function() {
+        star.addEventListener('mouseover', function () {
             document.querySelectorAll('.rating-stars i').forEach(s => {
                 s.classList.remove('selected');
                 if (s.getAttribute('data-rating') <= this.getAttribute('data-rating')) {
@@ -38,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        star.addEventListener('mouseleave', function() {
+        star.addEventListener('mouseleave', function () {
             document.querySelectorAll('.rating-stars i').forEach(s => {
                 s.classList.remove('selected');
                 if (s.getAttribute('data-rating') <= selectedRating) {
@@ -48,11 +57,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-// Function to submit the rating and close the modal
-window.submitRating = function() {
+
+// Global removeRating function (rate kaldirma)
+window.removeRating = function () {
+    if (selectedProductId) {
+        fetch(removeRatingUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                product_id: selectedProductId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Modal'i kapat
+                    var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+                    if (ratingModal) {
+                        ratingModal.hide();
+                    }
+
+                    // Overlay'i manuel olarak kaldır
+                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+                    // Kullanıcının ürün kartındaki rating bölümünü kaldır
+                    const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
+                    if (userRatingElement) {
+                        userRatingElement.innerHTML = '<i class="far fa-star me-1"></i> Rate';
+                    }
+                } else {
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+}
+
+// Global submitRating function (rate ekleme)
+window.submitRating = function () {
     if (selectedRating > 0 && selectedProductId) {
-        // Perform an AJAX request to send the rating to the server
-        fetch(rateProductUrl, {  // Burada doğrudan route değişkenini kullandık
+        fetch(rateProductUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -66,16 +115,24 @@ window.submitRating = function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Show confirmation message with the rating in yellow
                     document.getElementById('selectedRatingDisplay').innerHTML = `Your rating: <span style="color: yellow; font-size: 1.5rem;">${selectedRating}</span> has been submitted!`;
 
-                    // Close the modal after a brief delay
                     setTimeout(() => {
                         var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
-                        ratingModal.hide();
-                    }, 1000); // Delay to allow user to see the message before modal closes
+                        if (ratingModal) {
+                            ratingModal.hide();
+                        }
+
+                        // Overlay'i manuel olarak kaldır
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+                        // Kullanıcının ürün kartındaki rating bölümünü güncelle
+                        const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
+                        if (userRatingElement) {
+                            userRatingElement.innerHTML = `<i class="fas fa-star me-1" style="color: #1e73be;"></i> <span class="fw-bold">${selectedRating}/5</span>`;
+                        }
+                    }, 1000);
                 } else {
-                    // Display error message if the request was unsuccessful
                     document.getElementById('selectedRatingDisplay').innerText = 'An error occurred. Please try again.';
                     document.getElementById('selectedRatingDisplay').style.color = 'red';
                 }
@@ -86,8 +143,17 @@ window.submitRating = function() {
                 document.getElementById('selectedRatingDisplay').style.color = 'red';
             });
     } else {
-        // Display error message if no rating is selected
         document.getElementById('selectedRatingDisplay').innerText = 'Please select a rating.';
         document.getElementById('selectedRatingDisplay').style.color = 'red';
     }
 };
+
+//close Modal
+window.closeModal = function () {
+    var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+    if (ratingModal) {
+        ratingModal.hide();
+    }
+    // Overlay'i manuel olarak kaldır
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+}
