@@ -1,6 +1,6 @@
 // Bu tanımları JavaScript içinde doğrudan kullanın
-const rateProductUrl = window.rateProductUrl;
-const removeRatingUrl = window.removeRatingUrl;
+let rateProductUrl = window.rateProductUrl;
+let removeRatingUrl = window.removeRatingUrl;
 // Initialize the rating value and product ID
 let selectedRating = 0;
 let selectedProductId = null;
