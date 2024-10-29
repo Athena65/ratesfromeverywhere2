@@ -41,8 +41,10 @@
 <script>
     window.rateProductUrl = @json(route('rate.product'));
     window.removeRatingUrl = @json(route('remove.rating'));
+    // Kullanıcının giriş yapıp yapmadığını kontrol eden değişken
+    let isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+    let loginUrl = "{{ route('login') }}"; // Giriş sayfasının URL'sini alın
 </script>
-
 <!-- rate_modal.js dosyasını yükleyin -->
 @vite('resources/js/rate_modal.js')
 

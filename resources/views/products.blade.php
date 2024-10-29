@@ -14,18 +14,17 @@
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text">{{ $product->description }}</p>
 
-                        <!-- RFE Rating Display (Single Star) and Your Rating in the Same Row -->
+                        <!-- RFE Rating and Your Rating -->
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div class="d-flex align-items-center">
                                 <small><strong>RFE Rating</strong></small>&nbsp;
                                 <i class="fas fa-star rating-icon"></i>
-                                <span class="fw-bold ms-1">{{ $product->site_rating }}</span><span
-                                    class="text-muted"></span>
+                                <span class="fw-bold ms-1 site-rating" data-product-id="{{ $product->id }}">{{ $product->site_rating }}</span>
+                                <span class="text-muted"></span>
                             </div>
                             <div class="d-flex flex-column align-items-center"
-                                 onclick="rateProduct({{ $product->id }})">
+                                 onclick="rateProduct({{ $product->name,$product->id }})">
                                 <small><strong>Your Rating</strong></small>
-                                <!-- Place to call ratingmodal js -->
                                 <div class="user-rating px-2 py-1 d-flex align-items-center"
                                      data-product-id="{{ $product->id }}"
                                      onclick="openRatingModal('{{ $product->name }}', {{ $product->id }})">
@@ -38,6 +37,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- Include the modal -->
                         @include('rate_modal')
 

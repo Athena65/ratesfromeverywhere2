@@ -32,12 +32,7 @@
             <label for="image" class="form-label">Ürün Resmi</label>
             <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
-
-        <div class="mb-3">
-            <label for="site_rating" class="form-label">Site İçi Değerlendirme</label>
-            <input type="number" class="form-control" id="site_rating" name="site_rating" step="0.1" min="0" max="5">
-        </div>
-
+        
         <div class="mb-3">
             <label for="global_rating" class="form-label">Genel Değerlendirme</label>
             <input type="number" class="form-control" id="global_rating" name="global_rating" step="0.1" min="0"

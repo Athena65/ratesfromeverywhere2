@@ -46,7 +46,6 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
-            'site_rating' => 'nullable|numeric|min:0|max:5',
             'global_rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
@@ -56,14 +55,18 @@ class ProductController extends Controller
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // urunu olstur ve kaydet
-        Product::create([
+        // Ürün kaydedildikten sonra site_rating'i hesapla
+        $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath,
-            'site_rating' => $request->site_rating ?? 0,
             'global_rating' => $request->global_rating ?? 0,
+            'site_rating' => 0, // İlk başta 0
         ]);
+
+        // `user_ratings` tablosundan ortalama hesapla
+        $averageRating = UserRating::where('product_id', $product->id)->avg('user_rate');
+        $product->update(['site_rating' => $averageRating ?? 0]);
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla eklendi.');
     }
@@ -79,7 +82,6 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'site_rating' => 'nullable|numeric|min:0|max:5',
             'global_rating' => 'nullable|numeric|min:0|max:5',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
@@ -95,17 +97,21 @@ class ProductController extends Controller
             $product->image = $imagePath;
         }
 
+        // Kullanıcı puanlarının ortalamasını hesaplayarak `site_rating` alanını güncelle
+        $averageRating = UserRating::where('product_id', $product->id)->avg('user_rate');
+
         // Ürün bilgilerini güncelle
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
-            'site_rating' => $request->site_rating,
+            'site_rating' => round($averageRating, 1), // Ortalama kullanıcı puanı
             'global_rating' => $request->global_rating,
             'image' => $product->image,
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla güncellendi.');
     }
+
 
     // urun silme fonksiyonu
     public function destroy(Product $product)

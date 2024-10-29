@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\UserRating;
 use Illuminate\Support\Facades\Auth;
@@ -17,15 +18,22 @@ class RatingController extends Controller
 
         $userId = Auth::id();
 
-        // Eğer değerlendirme varsa güncelle, yoksa yeni kayıt oluştur (uesr_rates tablosuna)
-        $rating = UserRating::updateOrCreate(
+        // Eğer değerlendirme varsa güncelle, yoksa yeni kayıt oluştur
+        UserRating::updateOrCreate(
             ['user_id' => $userId, 'product_id' => $request->product_id],
             ['user_rate' => $request->user_rate]
         );
 
-        return response()->json(['success' => true, 'message' => 'Rating saved successfully!']);
+        // Güncellenmiş site_rating ortalamasını hesapla ve formatla
+        $newSiteRating = number_format((float) UserRating::where('product_id', $request->product_id)->avg('user_rate'), 1, '.', '');
+
+        // Ürün kaydını güncelle
+        Product::where('id', $request->product_id)->update(['site_rating' => $newSiteRating]);
+
+        // Yeni site_rating değerini döndür
+        return response()->json(['success' => true, 'new_site_rating' => $newSiteRating]);
     }
-    // rati i kaldirmak için
+
     public function removeRating(Request $request)
     {
         $request->validate([
@@ -39,6 +47,13 @@ class RatingController extends Controller
             ->where('product_id', $request->product_id)
             ->delete();
 
-        return response()->json(['success' => true, 'message' => 'Rating removed successfully!']);
+        // Güncellenmiş site_rating ortalamasını hesapla ve formatla
+        $newSiteRating = number_format((float) UserRating::where('product_id', $request->product_id)->avg('user_rate'), 1, '.', '');
+
+        // Ürün kaydını güncelle
+        Product::where('id', $request->product_id)->update(['site_rating' => $newSiteRating ?? 0]);
+
+        return response()->json(['success' => true, 'message' => 'Rating removed successfully!', 'new_site_rating' => $newSiteRating]);
     }
+
 }

@@ -6,9 +6,10 @@ let selectedRating = 0;
 let selectedProductId = null;
 
 // Global rateProduct function
-window.rateProduct = function (productId) {
+window.rateProduct = function (productName,productId) {
+    // Kullanıcı giriş yapmışsa rating modalını aç
     selectedProductId = productId;
-    openRatingModal("Product Name", productId);
+    openRatingModal(productName, productId);
 }
 
 // Function to open the rating modal with the product name and product ID
@@ -74,21 +75,28 @@ window.removeRating = function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // DOM'da site_rating değerini güncelle
+                    const siteRatingElement = document.querySelector(`.site-rating[data-product-id="${selectedProductId}"]`);
+                    if (siteRatingElement && data.new_site_rating !== undefined) {
+                        siteRatingElement.innerHTML = `${data.new_site_rating}`;
+                    }
                     // Modal'i kapat
-                    var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+                    const ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
                     if (ratingModal) {
                         ratingModal.hide();
                     }
-                    // Overlay'i manuel olarak kaldır
-                    setTimeout(() => {
-                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-                    }, 100); // Delay to ensure backdrop is removed after modal is hidden
 
-                    // Kullanıcının ürün kartındaki rating bölümünü kaldır
-                    const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
-                    if (userRatingElement) {
-                        userRatingElement.innerHTML = '<i class="far fa-star me-1"></i> Rate';
-                    }
+                    // Modal kapandıktan sonra overlay'i ve rating görünümünü temizle
+                    setTimeout(() => {
+                        // Overlay'i kaldır
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+                        // Kullanıcının ürün kartındaki rating bölümünü kaldır
+                        const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
+                        if (userRatingElement) {
+                            userRatingElement.innerHTML = '<i class="far fa-star me-1"></i> Rate';
+                        }
+                    }, 200); // Modal kapanmasını beklemek için biraz daha uzun bir gecikme
                 } else {
                     console.error('Error:', data.message);
                 }
@@ -97,10 +105,16 @@ window.removeRating = function () {
                 console.error('Error:', error);
             });
     }
-}
+};
+
 
 // Global submitRating function (rate ekleme)
 window.submitRating = function () {
+    // Kullanıcı giriş yapmamışsa giriş sayfasına yönlendir
+    if (!isAuthenticated) {
+        window.location.href = loginUrl;
+        return;
+    }
     if (selectedRating > 0 && selectedProductId) {
         fetch(rateProductUrl, {
             method: 'POST',
@@ -117,19 +131,28 @@ window.submitRating = function () {
             .then(data => {
                 if (data.success) {
                     document.getElementById('selectedRatingDisplay').innerHTML = `Your rating: <span style="color: yellow; font-size: 1.5rem;">${selectedRating}</span> has been submitted!`;
+                    // DOM'da kullanıcı puanını güncelle
+                    const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
+                    if (userRatingElement) {
+                        userRatingElement.innerHTML = `<i class="fas fa-star me-1" style="color: #1e73be;"></i> <span class="fw-bold">${selectedRating}/5</span>`;
+                    }
 
+                    // DOM'da site_rating değerini güncelle
+                    const siteRatingElement = document.querySelector(`.site-rating[data-product-id="${selectedProductId}"]`);
+                    if (siteRatingElement && data.new_site_rating !== undefined) {
+                        siteRatingElement.innerHTML = `${data.new_site_rating}`;
+                    }
+
+                    // Modali kapat
                     setTimeout(() => {
                         var ratingModal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
                         if (ratingModal) {
                             ratingModal.hide();
                         }
                         // Overlay'i manuel olarak kaldır
-                        setTimeout(() => {
-                            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-                        }, 100); // Delay to ensure backdrop is removed after modal is hidden
+                        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
 
                         // Kullanıcının ürün kartındaki rating bölümünü güncelle
-                        const userRatingElement = document.querySelector(`.user-rating[data-product-id="${selectedProductId}"]`);
                         if (userRatingElement) {
                             userRatingElement.innerHTML = `<i class="fas fa-star me-1" style="color: #1e73be;"></i> <span class="fw-bold">${selectedRating}/5</span>`;
                         }
@@ -149,6 +172,7 @@ window.submitRating = function () {
         document.getElementById('selectedRatingDisplay').style.color = 'red';
     }
 };
+
 
 //close Modal
 window.closeModal = function () {
