@@ -117,6 +117,24 @@
     margin-top: 10px;
 }
 
+
+header {
+    flex-wrap: wrap; /* Küçük ekranlarda elemanların alt alta geçmesini sağlar */
+}
+
+.logo img {
+    max-width: 100%; /* Logo boyutunu ekran genişliğine göre ayarlar */
+}
+
+.auth-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Elemanları sağ tarafa hizalar */
+}
+h1 {
+    white-space: normal; /* Metnin alt satıra kaymasını sağlar */
+    overflow-wrap: break-word; /* Gerekirse kelimeleri böler */
+}
 /* Küçük ekranlarda daha iyi hizalama */
 @media (max-width: 576px) {
     .card-title {
@@ -127,5 +145,45 @@
     }
     .stars-outer {
         font-size: 1rem;
+    }
+}
+@media (min-width: 768px) {
+    .auth-button {
+        flex-direction: row; /* Büyük ekranlarda elemanları yatay hizalar */
+        align-items: center; /* Elemanları ortalar */
+    }
+
+    .auth-button .btn,
+    .auth-button span {
+        margin-bottom: 0; /* Yatay düzende alt boşluğu kaldırır */
+    }
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 100%; /* Küçük ekranlarda logo ve başlığı tam genişlik yapar */
+        text-align: center; /* Logo ve başlık ortalanır */
+    }
+
+    .auth-button {
+        align-items: flex-end; /* Butonları sağa hizalar */
+        width: 100%; /* Küçük ekranlarda tam genişlik */
+    }
+
+    .auth-button .btn {
+        width: 100%; /* Butonların genişliğini tam yapar */
+        margin-bottom: 0.5rem; /* Butonlar arasında boşluk */
+    }
+
+    .auth-button span {
+        width: 100%; /* Kullanıcı adını tam genişlik yapar */
+        text-align: right; /* Sağ tarafa hizalar */
+    }
+    .admin-button{
+        width: auto;
+    }
+    h1 {
+        font-size: 1.2rem; /* Küçük ekranlarda başlık boyutunu küçültür */
+        max-width: 50%; /* Küçük ekranlarda genişliği tam yapar */
     }
 }

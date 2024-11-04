@@ -119,5 +119,11 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla silindi.');
     }
+    //urunleri tek tek gosterme fonksiyonu
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('product.show', compact('product'));
+    }
 
 }

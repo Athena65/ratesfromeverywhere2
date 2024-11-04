@@ -29,7 +29,7 @@
 
 </header>
 
-<!-- Ana İçerik: products.blade.php-->
+<!-- Ana İçerik: admin.products.blade.php-->
 <main class="container my-5">
     @include('admin/products/products')
 </main>

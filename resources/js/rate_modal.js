@@ -5,12 +5,6 @@ let removeRatingUrl = window.removeRatingUrl;
 let selectedRating = 0;
 let selectedProductId = null;
 
-// Global rateProduct function
-window.rateProduct = function (productName,productId) {
-    // Kullanıcı giriş yapmışsa rating modalını aç
-    selectedProductId = productId;
-    openRatingModal(productName, productId);
-}
 
 // Function to open the rating modal with the product name and product ID
 window.openRatingModal = function (productName, productId) {

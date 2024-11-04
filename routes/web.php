@@ -33,15 +33,19 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 // Product ve Admin sayfasi Routelari
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+    Route::get('/products', [ProductController::class, 'adminIndex'])->name('admin.products.index'); //urun goruntuleme
     Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('admin.products.store');
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('admin.products.update'); //urun duzenleme
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy'); //urun silme
 });
 
 //Product rate
 Route::post('/rate-product', [RatingController::class, 'rateProduct'])->name('rate.product'); //add to rating table
 Route::post('/remove-rating', [RatingController::class, 'removeRating'])->name('remove.rating'); //remove from rating table
 Route::post('/check-user-rating', [RatingController::class, 'checkUserRating']);
+
+
+//product genel
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show'); // Belirli bir ürünün detay sayfası
