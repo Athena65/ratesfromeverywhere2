@@ -37,10 +37,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Include the modal -->
-                        @include('rate_modal')
-
                         <!-- Global Rating Display (5 Stars) -->
                         <small><strong>Global Rating</strong></small><br>
                         <div class="d-flex align-items-center mb-2">
@@ -61,4 +57,5 @@
 
 <!-- rate modal css -->
 @vite('resources/css/rate_modal.css')
-
+<!-- Tek bir rate_modal.blade.php dosyasını include edin -->
+@include('rate_modal')

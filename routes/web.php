@@ -44,3 +44,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 //Product rate
 Route::post('/rate-product', [RatingController::class, 'rateProduct'])->name('rate.product'); //add to rating table
 Route::post('/remove-rating', [RatingController::class, 'removeRating'])->name('remove.rating'); //remove from rating table
+Route::post('/check-user-rating', [RatingController::class, 'checkUserRating']);

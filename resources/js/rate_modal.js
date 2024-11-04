@@ -14,14 +14,26 @@ window.rateProduct = function (productName,productId) {
 
 // Function to open the rating modal with the product name and product ID
 window.openRatingModal = function (productName, productId) {
-    document.getElementById('modalProductName').innerText = productName;
-    document.getElementById('selectedRatingDisplay').innerText = ''; // Clear previous rating display
+    const modalProductName = document.getElementById('modalProductName');
+    const selectedRatingDisplay = document.getElementById('selectedRatingDisplay');
+    const ratingStars = document.querySelectorAll('.rating-stars i');
+    const ratingModalElement = document.getElementById('ratingModal');
+    // Modal içeriğini hızlıca güncelleyin
+    modalProductName.innerText = productName;
+    selectedRatingDisplay.innerText = ''; // Clear previous rating display
     selectedRating = 0; // Reset rating
     selectedProductId = productId; // Set the selected product ID
-    document.querySelectorAll('.rating-stars i').forEach(star => {
-        star.classList.remove('selected'); // Reset star selection
+
+    // Tüm yıldızların seçimini temizleyin
+    ratingStars.forEach(star => {
+        star.classList.remove('selected');
     });
-    var ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'), {});
+
+    // Kullanıcının oylama durumunu kontrol et ve butonun görünürlüğünü ayarla (asenkron çalıştır)
+    checkUserRatingAndToggleRemoveButton(productId);
+
+    // Modal'ı gösterin (beklemeden)
+    const ratingModal = new bootstrap.Modal(ratingModalElement, {});
     ratingModal.show();
 };
 
@@ -61,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Global removeRating function (rate kaldirma)
 window.removeRating = function () {
+
     if (selectedProductId) {
         fetch(removeRatingUrl, {
             method: 'POST',
@@ -207,3 +220,35 @@ ratingModal.addEventListener('hidden.bs.modal', () => {
         card.classList.remove('card-hover-disabled');
     });
 });
+
+// Function to check if the user has rated the product and show/hide the remove button
+function checkUserRatingAndToggleRemoveButton(productId) {
+    const removeButton = document.querySelector('.btn-remove-rating');
+    // Butonu hemen gizle (yükleme hissi)
+    removeButton.style.visibility = 'hidden';
+    removeButton.style.opacity = '0';
+
+    // `fetch` isteğini başlat
+    fetch(`/check-user-rating`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.rated) {
+                // Butonun data-product-id özelliğini ayarlayın ve görünürlüğünü artırın
+                removeButton.setAttribute('data-product-id', productId);
+                removeButton.style.visibility = 'visible';
+                removeButton.style.opacity = '1';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}

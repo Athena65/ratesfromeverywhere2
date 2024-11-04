@@ -55,5 +55,20 @@ class RatingController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Rating removed successfully!', 'new_site_rating' => $newSiteRating]);
     }
+    public function checkUserRating(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $userId = Auth::id();
+
+        // Kullanıcının ürüne değerlendirme yapıp yapmadığını kontrol et
+        $userRatingExists = UserRating::where('user_id', $userId)
+            ->where('product_id', $request->product_id)
+            ->exists();
+
+        return response()->json(['rated' => $userRatingExists]);
+    }
 
 }

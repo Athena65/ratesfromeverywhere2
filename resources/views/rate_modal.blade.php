@@ -27,9 +27,12 @@
                 <button class="btn-rate" onclick="submitRating()">Rate</button>
 
                 <!-- Remove rating button -->
-                <button class="btn-remove-rating mt-2" onclick="removeRating()"
-                        style="color: blue; background: none; border: none;">Remove rating
-                </button>
+                <div style="text-align: center;">
+                    <button class="btn-remove-rating mt-2" onclick="removeRating()"
+                            style="color: blue; background: none; border: none;">Remove rating
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
