@@ -17,4 +17,10 @@ class Product extends Model
         'site_rating',
         'global_rating'
     ];
+
+    // Kategoriler ile many-to-many ilişkisi
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_product');
+    }
 }
