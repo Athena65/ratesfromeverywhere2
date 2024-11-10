@@ -2,9 +2,11 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="mb-4">Categories</h1>
+        <h1 class="text-center mb-4">Categories</h1>
 
-        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3">Add New Category</a>
+        <div class="text-start mb-4">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Add New Category</a>
+        </div>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -13,27 +15,39 @@
         @endif
 
         @if ($categories->isNotEmpty())
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <ul class="list-group">
+                    <ul class="list-group list-group-flush">
                         @foreach ($categories as $category)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>{{ $category->name }}</span>
-                                <div>
-                                    <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-warning me-2">Edit</a>
-                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
-                                    </form>
+                            <li class="list-group-item py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">{{ $category->name }}</h5>
+                                    <div class="d-flex">
+                                        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-warning me-2">Edit</a>
+                                        <a href="{{ route('admin.subcategories.create', ['category' => $category->id]) }}" class="btn btn-sm btn-primary">Add Subcategory</a>
+                                    </div>
                                 </div>
+
+                                <!-- Display Subcategories -->
+                                @if ($category->subcategories->isNotEmpty())
+                                    <ul class="list-group mt-3 ms-4">
+                                        @foreach ($category->subcategories as $subcategory)
+                                            <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                                <span>{{ $subcategory->name }}</span>
+                                                <a href="{{ route('admin.subcategories.edit', ['category' => $category->id, 'subcategory' => $subcategory->id]) }}" class="btn btn-sm btn-warning">Edit</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <div class="alert alert-light mt-3 ms-4 mb-0">No subcategories available.</div>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
                 </div>
             </div>
         @else
-            <div class="alert alert-info">No categories available.</div>
+            <div class="alert alert-info text-center mt-4">No categories available.</div>
         @endif
     </div>
 @endsection

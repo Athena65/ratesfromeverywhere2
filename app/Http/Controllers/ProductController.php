@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\UserRating;
 use Illuminate\Http\Request;
@@ -28,8 +29,10 @@ class ProductController extends Controller
     // Ürün oluşturma formunu gösterir
     public function create()
     {
-        return view('admin.products.create'); // Görünümü döndürüyor
+        $categories = Category::all(); // Retrieve all categories
+        return view('admin.products.create', compact('categories')); // Pass categories to the view
     }
+
 
     // Admin panelinde ürünleri listelemek için
     public function adminIndex()
@@ -47,26 +50,30 @@ class ProductController extends Controller
             'description' => 'required|string|max:1000',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
             'global_rating' => 'nullable|numeric|min:0|max:5',
+            'categories' => 'array|exists:categories,id', // Validate categories array
         ]);
 
-        // resmi buraya kaydeder :  storage/app/public/products
+        // Save the image if it exists
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        // Ürün kaydedildikten sonra site_rating'i hesapla
+        // Create the product
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath,
             'global_rating' => $request->global_rating ?? 0,
-            'site_rating' => 0, // İlk başta 0
+            'site_rating' => 0, // Initialize with 0
         ]);
 
-        // `user_ratings` tablosundan ortalama hesapla
+        // Calculate and set the site rating based on user ratings
         $averageRating = UserRating::where('product_id', $product->id)->avg('user_rate');
         $product->update(['site_rating' => $averageRating ?? 0]);
+
+        // Sync categories with the product
+        $product->categories()->sync($request->input('categories', []));
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla eklendi.');
     }
@@ -74,7 +81,8 @@ class ProductController extends Controller
     // urun duzenleme fonksiyonu
     public function edit(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+        $categories = Category::all(); // Get all categories
+        return view('admin.products.edit', compact('product','categories'));
     }
     public function update(Request $request, Product $product)
     {
@@ -108,6 +116,9 @@ class ProductController extends Controller
             'global_rating' => $request->global_rating,
             'image' => $product->image,
         ]);
+        // Sync selected categories with the product
+        $product->categories()->sync($request->input('categories', []));
+
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla güncellendi.');
     }

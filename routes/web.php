@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SubcategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 
@@ -51,13 +52,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy'); // Kategori silme
 
     // Alt kategori yönetimi rotaları
-   /* Route::get('/categories/{category}/subcategories', [SubcategoryController::class, 'index'])->name('admin.subcategories.index'); // Alt kategori görüntüleme
     Route::get('/categories/{category}/subcategories/create', [SubcategoryController::class, 'create'])->name('admin.subcategories.create');
     Route::post('/categories/{category}/subcategories', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
     Route::get('/categories/{category}/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
     Route::put('/categories/{category}/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update'); // Alt kategori düzenleme
     Route::delete('/categories/{category}/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.destroy'); // Alt kategori silme
-   */
 });
 
 //Product rate

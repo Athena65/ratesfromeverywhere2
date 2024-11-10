@@ -6,7 +6,7 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('admin.categories.update', $category) }}" method="POST">
+                <form action="{{ route('admin.categories.update', $category) }}" method="POST" style="display: inline;">
                     @csrf
                     @method('PUT')
 
@@ -16,6 +16,13 @@
                     </div>
 
                     <button type="submit" class="btn btn-success">Update</button>
+                </form>
+
+                <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn  btn-danger" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+
                     <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>

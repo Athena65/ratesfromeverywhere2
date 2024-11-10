@@ -14,7 +14,11 @@
                         <label for="name" class="form-label">Kategori Adı:</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="Kategori Adını Girin" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary w-50 me-2">Save</button>
+                        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary w-50">Cancel</a>
+                    </div>
                 </form>
             </div>
         </div>

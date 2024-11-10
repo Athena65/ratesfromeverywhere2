@@ -129,11 +129,11 @@ header {
 .auth-button {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Elemanları sağ tarafa hizalar */
+    align-items: flex-end;
 }
 h1 {
-    white-space: normal; /* Metnin alt satıra kaymasını sağlar */
-    overflow-wrap: break-word; /* Gerekirse kelimeleri böler */
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 /* Küçük ekranlarda daha iyi hizalama */
 @media (max-width: 576px) {
@@ -149,41 +149,79 @@ h1 {
 }
 @media (min-width: 768px) {
     .auth-button {
-        flex-direction: row; /* Büyük ekranlarda elemanları yatay hizalar */
-        align-items: center; /* Elemanları ortalar */
+        flex-direction: row;
+        align-items: center;
     }
 
     .auth-button .btn,
     .auth-button span {
-        margin-bottom: 0; /* Yatay düzende alt boşluğu kaldırır */
+        margin-bottom: 0;
     }
 }
 
 @media (max-width: 768px) {
     .logo {
-        width: 100%; /* Küçük ekranlarda logo ve başlığı tam genişlik yapar */
-        text-align: center; /* Logo ve başlık ortalanır */
+        width: 100%;
+        text-align: center;
     }
 
     .auth-button {
-        align-items: flex-end; /* Butonları sağa hizalar */
-        width: 100%; /* Küçük ekranlarda tam genişlik */
+        align-items: flex-end;
+        width: 100%;
     }
 
     .auth-button .btn {
-        width: 100%; /* Butonların genişliğini tam yapar */
-        margin-bottom: 0.5rem; /* Butonlar arasında boşluk */
+        width: 100%;
+        margin-bottom: 0.5rem;
     }
 
     .auth-button span {
-        width: 100%; /* Kullanıcı adını tam genişlik yapar */
-        text-align: right; /* Sağ tarafa hizalar */
+        width: 100%;
+        text-align: right;
     }
     .admin-button{
         width: auto;
     }
     h1 {
-        font-size: 1.2rem; /* Küçük ekranlarda başlık boyutunu küçültür */
-        max-width: 50%; /* Küçük ekranlarda genişliği tam yapar */
+        font-size: 1.2rem;
+        max-width: 50%;
     }
+}
+/* button styles */
+.btn-primary {
+    background-color: #030F36;
+    border-color: #6A0DAD;
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #0C32B8;
+    border-color: #5A0A8A;
+}
+
+
+.btn-secondary {
+    background-color: #FF5722;
+    border-color: #FF5722;
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-secondary:hover {
+    background-color: #E64A19;
+    border-color: #E64A19;
+}
+
+
+.btn-warning {
+    background-color: #D1CF46;
+    border-color: #FFC107;
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-warning:hover {
+    background-color: #FFFD55;
+    border-color: #FFA000;
 }

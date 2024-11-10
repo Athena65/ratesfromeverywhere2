@@ -15,7 +15,7 @@
 </head>
 <body>
 <!-- Header -->
-<header class="d-flex justify-content-between align-items-center p-3 bg-primary text-white">
+<header class="d-flex justify-content-between align-items-center p-3 bg-info text-white">
     <div class="logo d-flex align-items-center">
         <a href="/" title="Home">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s" alt="Logo" style="height: 50px;">
