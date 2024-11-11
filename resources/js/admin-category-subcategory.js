@@ -21,10 +21,11 @@ function loadSubcategoriesForSelectedCategories() {
         // Eğer hiçbir kategori seçilmemişse, alt kategori alanını boş bırakın
         return;
     }
-
+// productId'yi kontrol et. Tanımlı değilse boş bir dize olarak ayarla
+    const urlProductIdPart = typeof productId !== 'undefined' && productId ? `/${productId}` : '';
     // Her seçili kategori için alt kategorileri al
     selectedCategories.forEach(categoryId => {
-        fetch(`/admin/categories/${categoryId}/subcategories/${productId}`)
+        fetch(`/admin/categories/${categoryId}/subcategories${urlProductIdPart}`)
             .then(response => response.json())
             .then(data => {
                 const categoryName = data.category_name;
