@@ -26,6 +26,7 @@ class ProductController extends Controller
 
         return view('welcome', compact('products'));
     }
+
     // Ürün oluşturma formunu gösterir
     public function create()
     {
@@ -51,13 +52,14 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
             'global_rating' => 'nullable|numeric|min:0|max:5',
             'categories' => 'array|exists:categories,id', // Validate categories array
+            'subcategories' => 'nullable|array|exists:subcategories,id', // Validate subcategories array
         ]);
 
         // Save the image if it exists
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-        }
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('products', 'public') : null;
+
+        // Calculate the initial site rating based on user ratings
+        $initialSiteRating = UserRating::where('product_id', $request->id)->avg('user_rate') ?? 0;
 
         // Create the product
         $product = Product::create([
@@ -65,15 +67,15 @@ class ProductController extends Controller
             'description' => $request->description,
             'image' => $imagePath,
             'global_rating' => $request->global_rating ?? 0,
-            'site_rating' => 0, // Initialize with 0
+            'site_rating' => $initialSiteRating,
         ]);
-
-        // Calculate and set the site rating based on user ratings
-        $averageRating = UserRating::where('product_id', $product->id)->avg('user_rate');
-        $product->update(['site_rating' => $averageRating ?? 0]);
 
         // Sync categories with the product
         $product->categories()->sync($request->input('categories', []));
+
+
+        // Sync subcategories with the product (if provided)
+        $product->subcategories()->sync($request->input('subcategories', []));
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla eklendi.');
     }
@@ -82,43 +84,43 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all(); // Get all categories
-        return view('admin.products.edit', compact('product','categories'));
+        return view('admin.products.edit', compact('product', 'categories'));
     }
+
     public function update(Request $request, Product $product)
     {
         // Veriyi doğrula
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'global_rating' => 'nullable|numeric|min:0|max:5',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categories' => 'array|exists:categories,id', // Kategori doğrulama
+            'subcategories' => 'nullable|array|exists:subcategories,id' // Alt kategori doğrulama
         ]);
 
-        // Yeni resim yüklendiyse mevcut resmi sil ve yenisini kaydet
+        // Görsel işleme: Eğer yeni bir resim yüklendiyse eskiyi silip yenisini kaydediyoruz
         if ($request->hasFile('image')) {
-            // Eski resmi sil
             if ($product->image) {
                 Storage::delete('public/' . $product->image);
             }
-            // Yeni resmi kaydet
-            $imagePath = $request->file('image')->store('products', 'public');
-            $product->image = $imagePath;
+            $validatedData['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            $validatedData['image'] = $product->image; // Mevcut resmi koru
         }
 
         // Kullanıcı puanlarının ortalamasını hesaplayarak `site_rating` alanını güncelle
         $averageRating = UserRating::where('product_id', $product->id)->avg('user_rate');
+        $validatedData['site_rating'] = round($averageRating, 1);
 
         // Ürün bilgilerini güncelle
-        $product->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'site_rating' => round($averageRating, 1), // Ortalama kullanıcı puanı
-            'global_rating' => $request->global_rating,
-            'image' => $product->image,
-        ]);
-        // Sync selected categories with the product
+        $product->update($validatedData);
+
+        // Kategorileri senkronize et
         $product->categories()->sync($request->input('categories', []));
 
+        // Alt kategorileri senkronize et
+        $product->subcategories()->sync($request->input('subcategories', []));
 
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla güncellendi.');
     }
@@ -130,6 +132,7 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')->with('success', 'Ürün başarıyla silindi.');
     }
+
     //urunleri tek tek gosterme fonksiyonu
     public function show($id)
     {

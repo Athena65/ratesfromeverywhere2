@@ -57,6 +57,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/categories/{category}/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
     Route::put('/categories/{category}/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update'); // Alt kategori düzenleme
     Route::delete('/categories/{category}/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.destroy'); // Alt kategori silme
+    Route::get('/categories/{categoryId}/subcategories/{productId?}', [CategoryController::class, 'getSubcategories']);//secili kategoriye ait alt kategoriyi getir
 });
 
 //Product rate

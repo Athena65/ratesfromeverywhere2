@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin - Yönetim Paneli')</title>
+    <title>@yield('title', 'RFE - Yönetim Paneli')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Yıldızlar için ve diğer özel stiller -->
     @vite('resources/css/app.css')

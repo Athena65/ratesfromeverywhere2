@@ -23,4 +23,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'category_product');
     }
+    // Alt kategoriler ile many-to-many ilişkisi
+    public function subcategories()
+    {
+        return $this->belongsToMany(Subcategory::class, 'product_subcategory');
+    }
 }

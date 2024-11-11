@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Yeni Ürün Ekle')
+@section('title', 'RFE - Yeni Ürün Ekle')
 
 @section('content')
     <div class="container mt-4">
@@ -44,7 +44,7 @@
                             <div class="col-md-6 col-lg-4 mb-2">
                                 <div class="form-check">
                                     <input
-                                        class="form-check-input"
+                                        class="form-check-input category-checkbox"
                                         type="checkbox"
                                         name="categories[]"
                                         value="{{ $category->id }}"
@@ -59,7 +59,19 @@
                 </div>
             </div>
 
+            <!-- Subcategory Selection -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Alt Kategoriler</label>
+                <div class="p-3 border rounded bg-light">
+                    <div class="row" id="subcategoryContainer">
+                        <!-- Alt kategoriler dinamik olarak eklenecek -->
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary w-100 py-2">Oluştur</button>
         </form>
     </div>
+    <!-- to list subcategories of categories -->
+    @vite('resources/js/admin-category-subcategory.js')
 @endsection

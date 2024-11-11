@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Ürünü Düzenle')
+@section('title', 'RFE - Ürünü Düzenle')
 
 @section('content')
     <div class="container mt-4">
@@ -49,4 +49,6 @@
             <button type="submit" class="btn btn-primary w-100 py-2">Güncelle</button>
         </form>
     </div>
+    <!-- to list subcategories of categories -->
+    @vite('resources/js/admin-category-subcategory.js')
 @endsection

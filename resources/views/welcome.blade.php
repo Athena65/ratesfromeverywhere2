@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome Page')
+@section('title', 'Rates From Everywhere')
 
 @section('content')
     @include('products')

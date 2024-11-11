@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -89,4 +91,35 @@ class CategoryController extends Controller
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
+// CategoryController.php içindeki getSubcategories metodu
+    public function getSubcategories($categoryId, $productId = null)
+    {
+        try {
+            // Kategori adını ve alt kategorileri al
+            $categoryName = Category::where('id', $categoryId)->value('name');
+            $subcategories = Subcategory::where('category_id', $categoryId)->get();
+
+            // Seçili alt kategorileri belirle
+            $selectedSubcategories = [];
+            if ($productId) {
+                // `product_subcategory` tablosundan daha önce seçili olan alt kategorileri al
+                $selectedSubcategories = \DB::table('product_subcategory')
+                    ->where('product_id', $productId)
+                    ->pluck('subcategory_id')
+                    ->toArray();
+            }
+
+            // JSON yanıtını döndür
+            return response()->json([
+                'category_name' => $categoryName,
+                'subcategories' => $subcategories,
+                'selected_subcategories' => $selectedSubcategories
+            ]);
+        } catch (\Exception $e) {
+            // Hata durumunda log kaydı
+            \Log::error("getSubcategories hatası: " . $e->getMessage());
+            return response()->json(['error' => 'Bir hata oluştu.'], 500);
+        }
+    }
+
 }

@@ -22,6 +22,6 @@ class Category extends Model
     // Alt kategoriler ile one-to-many ilişkisi
     public function subcategories()
     {
-        return $this->hasMany(Subcategory::class); //categorinin birden fazla subkategorisi var
+        return $this->hasMany(Subcategory::class); //categorinin birden fazla subkategorisi var subcategorinin bir tane kategorisi var
     }
 }

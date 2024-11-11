@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Yeni Kategori Ekle')
+@section('title', 'RFE - Yeni Kategori Ekle')
 
 @section('content')
     <div class="container">
