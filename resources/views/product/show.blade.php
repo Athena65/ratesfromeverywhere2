@@ -19,7 +19,8 @@
                 <div>
                     <h1 class="mb-3">{{ $product->name }}</h1>
                     <p class="text-muted mb-4">{{ $product->description }}</p>
-
+                    <!-- Kategori ve Alt Kategori Görüntüleme -->
+                    @include('partials.categories.display')
                     <!-- Ürün Oylama Bölümü -->
                     <div class="mb-3">
                         @include('product_rating', ['product' => $product])
