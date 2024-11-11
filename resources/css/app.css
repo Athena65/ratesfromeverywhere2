@@ -53,45 +53,48 @@
     font-weight: 900;
 }
 
-/* Kart ve gölge efektleri */
 .card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
 }
+
+
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-color: #b3d4fc;
 }
-/* Hover devre dışı bırakıldığında */
+
 .card-hover-disabled:hover {
     transform: none;
     box-shadow: none;
 }
 
-/* Kart başlık ve metin */
 .card-title {
     font-weight: bold;
-    color: #333;
-    font-size: 1.1rem;
+    color: #222;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 
 .card-text {
     color: #555;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
-/* Karttaki butonlar */
 .card-footer .btn {
-    padding: 0.375rem 0.75rem;
+    padding: 0.5rem 1rem;
     font-size: 0.875rem;
-    border-radius: 5px;
+    border-radius: 6px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .card-footer .btn-primary {
-    background-color: #5a9bf6; /* Light blue */
+    background-color: #5a9bf6;
     border-color: #5a9bf6;
     color: #fff;
 }
@@ -112,9 +115,8 @@
     border-color: #b52a34;
 }
 
-/* Kart içinde başlık, yıldız ve buton arasındaki boşluk */
 .card-body small, .card-body h5, .card-body p, .card-footer {
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 
