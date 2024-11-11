@@ -23,7 +23,6 @@
 
                             <!-- Kategori ve Alt Kategori Görüntüleme -->
                             @include('partials.categories.display')
-
                             <!-- RFE Rating Görüntüleme -->
                             <div class="mb-2">
                                 <small><strong>RFE Rating:</strong></small>
