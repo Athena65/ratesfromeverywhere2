@@ -12,11 +12,24 @@
 <body>
 <!-- Header -->
 <header class="d-flex justify-content-between align-items-center p-3 bg-info text-white">
-    <div class="logo">
-        <a href="/" title="Ana Sayfa">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s"
-                 alt="Logo" style="height: 50px;">
-        </a>
+    <div class="d-flex align-items-center">
+        <div class="logo me-3">
+            <a href="/" title="Ana Sayfa">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s"
+                     alt="Logo" style="height: 50px;">
+            </a>
+        </div>
+
+        <!-- Dil Ayarla Dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Dil Ayarla
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                <li><a class="dropdown-item" href="{{ route('change.language', 'tr') }}">Türkçe</a></li>
+                <li><a class="dropdown-item" href="{{ route('change.language', 'en') }}">English</a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="auth-button">
@@ -41,7 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     //disappearing alerts
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const alerts = document.querySelectorAll('.alert');
         alerts.forEach(alert => {
             // Skip alert elements with the 'alert-info' class

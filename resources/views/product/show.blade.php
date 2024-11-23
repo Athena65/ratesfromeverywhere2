@@ -8,7 +8,7 @@
             <!-- Ürün Resmi -->
             <div class="col-md-6 text-center">
                 @if($product->image)
-                    <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid mb-4" alt="{{ $product->name }}">
+                    <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid mb-4" alt="{{ $product->name }}" style="max-height: 600px">
                 @else
                     <img src="https://via.placeholder.com/300" class="img-fluid mb-4" alt="Resim yok">
                 @endif

@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'RFE - Yeni Kategori Ekle')
+@section('title', 'RFE - Add New Category')
 
 @section('content')
     <div class="container">
-        <h1 class="text-center mb-4">Yeni Kategori Ekle</h1>
+        <h1 class="text-center mb-4">Add New Category</h1>
 
         <div class="card">
             <div class="card-body">

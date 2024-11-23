@@ -7,7 +7,8 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SubcategoryController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,18 @@ use App\Http\Controllers\PageController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// dil degistirme icin
+Route::get('/change-language/{lang}', function ($lang) {
+    // Geçerli dili ayarla
+    if (in_array($lang, ['en', 'tr'])) {
+        App::setLocale($lang);
+        Session::put('locale', $lang);
+    }
+    return redirect()->back();
+})->name('change.language');
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
-Route::get('/example-page', [PageController::class, 'showExamplePage']);
 
 //Login Routelari
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
