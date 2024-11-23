@@ -1,5 +1,5 @@
 <div class="container my-5">
-    <h2 class="text-center mb-4">Ürünlerimiz</h2>
+    <h2 class="text-center mb-4">{{__('messages.ourproducts')}}</h2>
     <div class="row">
         @forelse($products as $product)
             <div class="col-md-4 mb-4">

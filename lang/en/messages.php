@@ -11,4 +11,8 @@ return [
     'rating'=>'Rating',
     'edit'=>'Edit',
     'delete'=>'Delete',
+    'configurelang'=>'Lang',
+    'adminpanel'=>'Admin Panel',
+    'backtoproductlist'=>'Back to Product List',
+    'global'=>'Global',
 ];

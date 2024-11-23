@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap</title>
+    <title>{{ __('messages.login') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
-    <h2 class="text-center">Giriş Yap</h2>
+    <h2 class="text-center">{{ __('messages.login') }}</h2>
     <form action="{{ route('login') }}" method="POST" class="mx-auto" style="max-width: 400px;">
         @csrf
         <div class="mb-3">
@@ -19,7 +19,7 @@
             <label for="password" class="form-label">Şifre</label>
             <input type="password" name="password" class="form-control" id="password" required>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+        <button type="submit" class="btn btn-primary w-100">{{ __('messages.login') }}</button>
     </form>
     <div class="text-center mt-3">
         <p>Hesabın yok mu? <a href="{{ route('register') }}" class="btn btn-link">Kayıt Ol</a></p>

@@ -22,7 +22,7 @@
     </div>
 </div>
 <!-- Global Rating Display (5 Stars) -->
-<small><strong>Global Rating</strong></small><br>
+<small><strong>{{__('messages.global')}} {{__('messages.rating')}}</strong></small><br>
 <div class="d-flex align-items-center mb-2">
     <div class="stars-outer me-2">
         <div class="stars-inner"

@@ -25,7 +25,7 @@
                             @include('partials.categories.display')
                             <!-- RFE Rating Görüntüleme -->
                             <div class="mb-2">
-                                <small><strong>RFE Rating:</strong></small>
+                                <small><strong>RFE {{__('messages.rating')}}:</strong></small>
                                 <div class="d-flex align-items-center">
                                     <div class="stars-outer me-2">
                                         <div class="stars-inner"
@@ -37,7 +37,7 @@
 
                             <!-- Global Rating Görüntüleme -->
                             <div class="mb-2">
-                                <small><strong>Global Rating:</strong></small>
+                                <small><strong>{{__('messages.global')}} {{__('messages.rating')}}:</strong></small>
                                 <div class="d-flex align-items-center">
                                     <div class="stars-outer me-2">
                                         <div class="stars-inner"
@@ -52,12 +52,12 @@
                     <!-- Düzenle ve Sil Butonları -->
                     @if(Auth::user()->is_admin == 1)
                     <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0">
-                        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Düzenle</a>
+                        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">{{__('messages.edit')}}</a>
                         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
                               onsubmit="return confirm('Bu ürünü silmek istediğinizden emin misiniz?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Sil</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">{{__('messages.delete')}}</button>
                         </form>
                     </div>
                     @endif

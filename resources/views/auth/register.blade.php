@@ -31,7 +31,7 @@
     </form>
 
     <div class="text-center mt-3">
-        <p>Zaten bir hesabınız var mı? <a href="{{ route('login') }}" class="btn btn-link">Giriş Yap</a></p>
+        <p>Zaten bir hesabınız var mı? <a href="{{ route('login') }}" class="btn btn-link">{{ __('messages.login') }}</a></p>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

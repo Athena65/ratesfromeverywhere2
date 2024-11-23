@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'RFE - Yönetim Paneli')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Yıldızlar için ve diğer özel stiller -->
     @vite('resources/css/app.css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
 <!-- Header -->
@@ -23,7 +21,7 @@
         <!-- Dil Ayarla Dropdown -->
         <div class="dropdown">
             <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Dil Ayarla
+                {{__('messages.configurelang')}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                 <li><a class="dropdown-item" href="{{ route('change.language', 'tr') }}">Türkçe</a></li>
@@ -34,14 +32,14 @@
 
     <div class="auth-button">
         @if(Route::is('admin.products.index'))
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary me-3">Yeni Kategori Ekle</a>
-            <a href="{{ route('admin.products.create') }}" class="btn btn-warning me-3">Yeni Ürün Ekle</a>
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary me-3">{{__('messages.addnewcategory')}}</a>
+            <a href="{{ route('admin.products.create') }}" class="btn btn-warning me-3">{{__('messages.addnewproduct')}}</a>
         @else
-            <a href="{{ route('admin.products.index') }}" class="btn btn-light me-3">Ürün Listesine Dön</a>
+            <a href="{{ route('admin.products.index') }}" class="btn btn-light me-3">{{__('messages.backtoproductlist')}}</a>
         @endif
         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
             @csrf
-            <button type="submit" class="btn btn-danger">Çıkış Yap</button>
+            <button type="submit" class="btn btn-danger">{{ __('messages.logout') }}</button>
         </form>
     </div>
 </header>
