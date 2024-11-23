@@ -1,5 +1,4 @@
 <div class="container my-5">
-    <h2 class="text-center mb-4">Our Products</h2>
     <div class="row">
         @forelse($products as $product)
             <div class="col-md-4 mb-4">
@@ -51,15 +50,21 @@
 
                     <!-- Düzenle ve Sil Butonları -->
                     @if(Auth::user()->is_admin == 1)
-                    <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0">
-                        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">{{__('messages.edit')}}</a>
-                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
-                              onsubmit="return confirm('Bu ürünü silmek istediğinizden emin misiniz?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">{{__('messages.delete')}}</button>
-                        </form>
-                    </div>
+                        <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0"
+                             style="position: absolute; bottom: 0; width: 100%; z-index: 1;">
+                            <a href="{{ route('admin.products.edit', $product->id) }}"
+                               class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                {{__('messages.edit')}}
+                            </a>
+                            <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                  onsubmit="return confirm('Bu ürünü silmek istediğinizden emin misiniz?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                    {{__('messages.delete')}}
+                                </button>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div>
