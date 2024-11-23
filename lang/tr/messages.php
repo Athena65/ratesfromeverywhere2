@@ -15,4 +15,8 @@ return [
     'adminpanel'=>'Yönetici Paneli',
     'backtoproductlist'=>'Ürün Listesine Dön',
     'global'=>'Genel',
+    'rate'=>'Değerlendir',
+    'removerating'=>'Değerlendirmeyi Kaldır',
+    'categories'=>'Kategoriler',
+    'addsubcategory' => 'Alt Kategori Ekle',
 ];

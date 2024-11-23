@@ -24,12 +24,12 @@
                 </div>
 
                 <!-- Rate button -->
-                <button class="btn-rate" onclick="submitRating()">Rate</button>
+                <button class="btn-rate" onclick="submitRating()">{{__('messages.rate')}}</button>
 
                 <!-- Remove rating button -->
                 <div style="text-align: center;">
                     <button class="btn-remove-rating mt-2" onclick="removeRating()"
-                            style="color: blue; background: none; border: none;">Remove rating
+                            style="color: blue; background: none; border: none;">{{__('messages.removerating')}}
                     </button>
                 </div>
 

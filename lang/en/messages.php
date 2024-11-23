@@ -15,4 +15,8 @@ return [
     'adminpanel'=>'Admin Panel',
     'backtoproductlist'=>'Back to Product List',
     'global'=>'Global',
+    'rate'=>'Rate',
+    'removerating'=>'Removed Rating',
+    'categories'=>'Categories',
+    'addsubcategory' => 'Add Subcategory',
 ];

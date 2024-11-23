@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'RFE - Add New Category')
+@section('title', 'RFE - '. __('messages.addnewcategory'))
 
 @section('content')
     <div class="container">
-        <h1 class="text-center mb-4">Add New Category</h1>
+        <h1 class="text-center mb-4">{{__('messages.addnewcategory')}}</h1>
 
         <div class="card">
             <div class="card-body">

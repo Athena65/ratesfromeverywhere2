@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="text-center mb-4">Categories</h1>
+        <h1 class="text-center mb-4">{{__('messages.categories')}}</h1>
 
         <!-- Add New Category Button -->
         <div class="text-start mb-4">
-            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary -pill px-4 py-2">Add New Category</a>
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary -pill px-4 py-2">{{__('messages.addnewcategory')}}</a>
         </div>
 
         <!-- Success Message -->
@@ -26,8 +26,8 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="mb-0 fw-bold">{{ $category->name }}</h5>
                                     <div class="d-flex">
-                                        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-warning  me-2 px-3">Edit</a>
-                                        <a href="{{ route('admin.subcategories.create', ['category' => $category->id]) }}" class="btn btn-sm btn-primary px-3">Add Subcategory</a>
+                                        <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-warning  me-2 px-3">{{__('messages.edit')}}</a>
+                                        <a href="{{ route('admin.subcategories.create', ['category' => $category->id]) }}" class="btn btn-sm btn-primary px-3">{{__('messages.addsubcategory')}}</a>
                                     </div>
                                 </div>
 
@@ -38,7 +38,7 @@
                                         @foreach ($category->subcategories as $subcategory)
                                             <li class="list-group-item d-flex justify-content-between align-items-center border-0 bg-white shadow-sm  py-2 mb-2">
                                                 <span class="fw-normal">{{ $subcategory->name }}</span>
-                                                <a href="{{ route('admin.subcategories.edit', ['category' => $category->id, 'subcategory' => $subcategory->id]) }}" class="btn btn-sm btn-warning -pill px-3">Edit</a>
+                                                <a href="{{ route('admin.subcategories.edit', ['category' => $category->id, 'subcategory' => $subcategory->id]) }}" class="btn btn-sm btn-warning -pill px-3">{{__('messages.edit')}}</a>
                                             </li>
                                         @endforeach
                                     </ul>
