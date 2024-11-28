@@ -22,11 +22,13 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->intended('/'); // Başarılı giriş yapıldığında ana sayfaya yönlendirme
+            // Başarılı giriş mesajı
+            return redirect()->intended('/')
+                ->with('success', __('messages.login_successful'));
         }
 
         return back()->withErrors([
-            'email' => 'Girdiğiniz bilgiler yanlış.',
+            'email' => __('messages.invalid_credentials'),
         ]);
     }
  //commit pushdeneme

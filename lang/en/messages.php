@@ -19,4 +19,18 @@ return [
     'removerating'=>'Removed Rating',
     'categories'=>'Categories',
     'addsubcategory' => 'Add Subcategory',
+
+    //register,login page :
+    'register' => 'Register',
+    'name' => 'Name',
+    'email' => 'Email',
+    'password' => 'Password',
+    'password_confirmation' => 'Password Confirmation',
+    'already_have_account' => 'Already have an account?',
+    'error' => 'Error!',
+    'fix_issues' => 'Please fix the following issues:',
+    'registration_success' => 'Registration successfully completed!',
+    'invalid_credentials' => 'The credentials you entered are incorrect.',
+    'no_account' => "Don't have an account?",
+    'login_successful' => 'Login successful!',
 ];

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Rates From Everywhere')</title>
     <!-- yildizlar icin -->
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- ajax csrf korumasi -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -50,7 +50,12 @@
                 <button type="submit" class="btn btn-danger">{{ __('messages.logout') }}</button>
             </form>
         @else
-            <a href="{{ route('login') }}" class="btn btn-success">{{ __('messages.login') }}</a>
+            <!-- Route kontrolü -->
+            @if(request()->is('login'))
+                <a href="{{ route('register') }}" class="btn btn-secondary">{{ __('messages.register') }}</a>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-secondary">{{ __('messages.login') }}</a>
+            @endif
         @endauth
     </div>
 </header>
@@ -67,8 +72,6 @@
 <main class="container my-5">
     @yield('content')
 </main>
-
-@vite('resources/js/app.js')
 
 <script>
     // Başarı mesajını 3 saniye sonra gizle

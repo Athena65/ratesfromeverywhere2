@@ -37,3 +37,4 @@ Thumbs.db            # Windows
 *.swm
 
 /public/hot
+/public/build

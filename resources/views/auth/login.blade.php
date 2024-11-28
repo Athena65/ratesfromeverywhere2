@@ -1,58 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('messages.login') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-5">
-    <h2 class="text-center">{{ __('messages.login') }}</h2>
-    <form action="{{ route('login') }}" method="POST" class="mx-auto" style="max-width: 400px;">
-        @csrf
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" id="email" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Şifre</label>
-            <input type="password" name="password" class="form-control" id="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">{{ __('messages.login') }}</button>
-    </form>
-    <div class="text-center mt-3">
-        <p>Hesabın yok mu? <a href="{{ route('register') }}" class="btn btn-link">Kayıt Ol</a></p>
-    </div>
-</div>
+@extends('layouts.app')
 
-<!-- Hata Mesajı Modali -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="errorModalLabel">Eksik veya Hatalı Giriş</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Girdiğiniz bilgiler yanlış. Lütfen tekrar deneyin.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+@section('title', __('messages.login'))
+
+@section('content')
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <form action="{{ route('login') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="email" class="form-label">{{ __('messages.email') }}</label>
+                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" required>
+                                @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">{{ __('messages.password') }}</label>
+                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" required>
+                                @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">{{ __('messages.login') }}</button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <p class="mb-0">{{ __('messages.no_account') }} <a href="{{ route('register') }}" class="text-primary fw-bold">{{ __('messages.register') }}</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Hata Mesajı İçin Script -->
-@if ($errors->any())
-    <script>
-        var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-        errorModal.show();
-    </script>
-@endif
-
-</body>
-</html>
+    <!-- Hata Mesajı -->
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <strong>{{ __('messages.error') }}</strong> {{ __('messages.fix_issues') }}
+            <ul class="mt-2 mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+@endsection

@@ -31,7 +31,7 @@ class RegisterController extends Controller
         Auth::login($user); // Kullanıcıyı otomatik olarak oturum açtır
 
         // Başarı mesajını session'a ekleyin
-        $request->session()->flash('success', 'Üyelik başarıyla oluşturuldu!');
+        $request->session()->flash('success', __('messages.registration_success'));
 
         return redirect('/'); // Otomatik giriş yaptıktan sonra ana sayfaya yönlendir
     }
