@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\UserRating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -158,5 +159,31 @@ class ProductController extends Controller
 
         return view('product.show', compact('product'));
     }
+    //benzerini bul icin
+    public function findSimilar(Request $request)
+    {
+        // Ürün bilgilerini alın
+        $product = Product::findOrFail($request->product_id);
 
+        if (!$product->image) {
+            return back()->with('error', 'Product image not found.');
+        }
+
+        // Python API'ye resmi gönder
+        $response = Http::attach(
+            'image', file_get_contents(storage_path('app/public/' . $product->image)), 'image.jpg'
+        )->post('http://127.0.0.1:5000/process-image');
+
+        if ($response->failed()) {
+            return back()->with('error', 'Error processing image.');
+        }
+
+        // Python API'den dönen kategorilere göre ürünleri filtrele
+        $categories = $response->json()['categories'];
+        $similarProducts = Product::whereHas('subcategories', function ($query) use ($categories) {
+            $query->whereIn('name', $categories);
+        })->get();
+
+        return view('product.similar_products', compact('similarProducts'));
+    }
 }

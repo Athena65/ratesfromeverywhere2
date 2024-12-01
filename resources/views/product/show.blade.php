@@ -29,8 +29,13 @@
 
                 <!-- Benzerini Bul Butonu ve Resim -->
                 <div class="card mt-3 p-3 text-center">
-                    <a href="#" class="btn btn-primary">{{__('messages.find_similar')}}</a>
+                    <form action="{{ route('products.findSimilar') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="btn btn-primary">{{ __('messages.find_similar') }}</button>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>

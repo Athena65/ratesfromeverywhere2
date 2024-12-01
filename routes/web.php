@@ -79,3 +79,5 @@ Route::post('/check-user-rating', [RatingController::class, 'checkUserRating']);
 
 //product genel
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show'); // Belirli bir ürünün detay sayfası
+//benzerini bul icin
+Route::post('/find-similar', [ProductController::class, 'findSimilar'])->name('products.findSimilar');
