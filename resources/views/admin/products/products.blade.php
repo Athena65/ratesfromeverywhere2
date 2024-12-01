@@ -50,8 +50,7 @@
 
                     <!-- Düzenle ve Sil Butonları -->
                     @if(Auth::user()->is_admin == 1)
-                        <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0"
-                             style="position: absolute; bottom: 0; width: 100%; z-index: 1;">
+                        <div class="card-footer bg-light d-flex justify-content-between align-items-center border-0">
                             <a href="{{ route('admin.products.edit', $product->id) }}"
                                class="btn btn-sm btn-outline-primary rounded-pill px-3">
                                 {{__('messages.edit')}}
