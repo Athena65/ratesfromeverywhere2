@@ -13,18 +13,18 @@
 <body>
 <!-- Header -->
 <header class="d-flex justify-content-between align-items-center p-3 bg-info text-white">
-    <div class="d-flex align-items-center">
-        <div class="logo me-3">
-            <a href="/" title="Ana Sayfa">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s"
-                     alt="Logo" style="height: 50px;">
-            </a>
-        </div>
+    <div class="logo d-flex align-items-center">
+        <a href="/" title="Home">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s"
+                 alt="Logo" style="height: 50px;">
+        </a>
+        <h1 class="ms-3 mb-0" style="font-size: 1.5rem; color: #333;">Rates From Everywhere</h1>
 
         <!-- Dil Ayarla Dropdown -->
-        <div class="dropdown">
-            <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                {{__('messages.configurelang')}}
+        <div class="dropdown ms-3">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="languageDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                {{ __('messages.configurelang') }}
             </button>
             <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                 <li><a class="dropdown-item" href="{{ route('change.language', 'tr') }}">Türkçe</a></li>
