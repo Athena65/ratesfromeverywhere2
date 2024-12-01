@@ -15,7 +15,14 @@ class ProductController extends Controller
     public function index()
     {
         $userId = Auth::id(); // Mevcut kullanıcı ID'si
-        $products = Product::all();
+
+        // Ürünleri alt kategoriye göre sıralayarak al
+        $products = Product::with('subcategories') // Subcategory ilişkisini al
+        ->get()
+            ->sortBy(function ($product) {
+                // Alt kategoriyi alfabetik olarak sıralama için kullan
+                return optional($product->subcategories->first())->name;
+            });
 
         // Her ürün için kullanıcının verdiği puanı ilişkilendirin
         foreach ($products as $product) {
@@ -38,7 +45,13 @@ class ProductController extends Controller
     // Admin panelinde ürünleri listelemek için
     public function adminIndex()
     {
-        $products = Product::all(); // Tüm ürünleri al
+        // Ürünleri alt kategoriye göre sıralayarak al
+        $products = Product::with('subcategories') // Subcategory ilişkisini al
+        ->get()
+            ->sortBy(function ($product) {
+                // Alt kategoriyi alfabetik olarak sıralama için kullan
+                return optional($product->subcategories->first())->name;
+            });
         return view('admin.products.index', compact('products')); // Admin ürün sayfasına yönlendir
     }
 
@@ -140,8 +153,8 @@ class ProductController extends Controller
         // Her ürün için kullanıcının verdiği puanı ilişkilendirin
         $userId = Auth::id(); // Mevcut kullanıcı ID'si
         $product->user_rating = UserRating::where('product_id', $product->id)
-                ->where('user_id', $userId)
-                ->value('user_rate');
+            ->where('user_id', $userId)
+            ->value('user_rate');
 
         return view('product.show', compact('product'));
     }
