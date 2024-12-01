@@ -137,6 +137,12 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+        // Her ürün için kullanıcının verdiği puanı ilişkilendirin
+        $userId = Auth::id(); // Mevcut kullanıcı ID'si
+        $product->user_rating = UserRating::where('product_id', $product->id)
+                ->where('user_id', $userId)
+                ->value('user_rate');
+
         return view('product.show', compact('product'));
     }
 
