@@ -33,4 +33,7 @@ return [
     'invalid_credentials' => 'The credentials you entered are incorrect.',
     'no_account' => "Don't have an account?",
     'login_successful' => 'Login successful!',
+
+    //show blade.php
+    'find_similar' => 'Benzerini bul',
 ];

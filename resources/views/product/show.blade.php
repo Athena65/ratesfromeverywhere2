@@ -29,7 +29,7 @@
 
                 <!-- Benzerini Bul Butonu ve Resim -->
                 <div class="card mt-3 p-3 text-center">
-                    <a href="#" class="btn btn-primary">Benzerini Bul</a>
+                    <a href="#" class="btn btn-primary">{{__('messages.find_similar')}}</a>
                 </div>
             </div>
         </div>

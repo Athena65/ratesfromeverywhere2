@@ -33,4 +33,7 @@ return [
     'invalid_credentials' => 'Girdiğiniz bilgiler yanlış.',
     'no_account' => 'Hesabınız yok mu?',
     'login_successful' => 'Giriş başarılı!',
+
+    //show blade.php
+    'find_similar' => 'Benzerini bul',
 ];
