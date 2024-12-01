@@ -27,14 +27,14 @@
                     </div>
                 </div>
 
-                <!-- Benzerini Bul Butonu ve Resim -->
                 <div class="card mt-3 p-3 text-center">
                     <form action="{{ route('products.findSimilar') }}" method="POST">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="btn btn-primary">{{ __('messages.find_similar') }}</button>
+                        <button type="submit" class="btn btn-primary w-100">{{ __('messages.find_similar') }}</button>
                     </form>
                 </div>
+
 
             </div>
         </div>
