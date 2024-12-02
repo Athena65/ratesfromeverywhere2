@@ -34,6 +34,9 @@ return [
     'no_account' => 'Hesabınız yok mu?',
     'login_successful' => 'Giriş başarılı!',
 
-    //show blade.php
+    //Benzerini bul languages
     'find_similar' => 'Benzerini bul',
+    'no_similar_products' => 'Benzer ürün bulunamadı.',
+    'similar_products' => 'Benzer Ürünler',
+    'view_product' => 'Ürünü Görüntüle',
 ];

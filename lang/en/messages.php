@@ -34,6 +34,10 @@ return [
     'no_account' => "Don't have an account?",
     'login_successful' => 'Login successful!',
 
-    //show blade.php
-    'find_similar' => 'Benzerini bul',
+    //Benzerini bul languages
+    'find_similar' => 'Find similar',
+    'no_similar_products' => 'No similar products found.',
+    'similar_products' => 'Similar products',
+    'view_product' => 'Display Product',
+
 ];
