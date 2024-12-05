@@ -168,42 +168,58 @@ class ProductController extends Controller
         $product = Product::findOrFail($request->product_id);
 
         if (!$product->image) {
-            return back()->with('error', 'Product image not found.');
+            return back()->with('error', __('messages.product_image_not_found'));
         }
 
+        // Fetch all subcategories
         $allSubcategories = Subcategory::pluck('name')->toArray();
 
-        // Python API'ye resmi ve kategorileri gönder
+        // Prepare the image file path
+        $imagePath = storage_path('app/public/' . $product->image);
+
+        if (!file_exists($imagePath)) {
+            return back()->with('error', __('messages.product_image_not_found_on_server'));
+        }
+
+        // Send the image and subcategories to the Python API
         $response = Http::asMultipart()
-            ->attach('image', file_get_contents(storage_path('app/public/' . $product->image)), 'image.jpg')
+            ->attach('image', file_get_contents($imagePath), 'image.jpg')
             ->post('http://127.0.0.1:5000/process-image', [
                 'all_subcategories' => json_encode($allSubcategories),
             ]);
 
+        // Handle API failure
         if ($response->failed()) {
-            return back()->with('error', 'Error processing image.');
+            logger()->error('Python API request failed', [
+                'response' => $response->body(),
+                'status' => $response->status(),
+            ]);
+            return back()->with('error', __('messages.error_processing_image'));
         }
 
-        // Python'dan dönen kategorilere göre ürünleri filtrele
+
+        // Extract categories from the API response
         $categories = $response->json()['categories'] ?? [];
 
-        // Kategori bulunamadıysa boş bir liste döndür
+        // Handle the case where no categories are found
         if (empty($categories)) {
-            return view('product.similar_products', [
+                return view('product.similar_products', [
                 'similarProducts' => collect(),
                 'message' => __('messages.no_similar_products'),
             ]);
         }
 
-        // Benzer ürünleri alt kategorilere göre al
+        // Retrieve similar products based on subcategories
         $similarProducts = Product::whereHas('subcategories', function ($query) use ($categories) {
             $query->whereIn('name', $categories);
         })->get();
 
+        // Log the result for debugging
+        logger()->info('Similar products retrieved', [
+            'categories' => $categories,
+            'similarProducts' => $similarProducts->pluck('id')->toArray(),
+        ]);
+
         return view('product.similar_products', compact('similarProducts'));
     }
-
-
-
-
 }
