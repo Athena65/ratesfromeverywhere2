@@ -56,6 +56,7 @@
 }
 
 .card {
+
     border: 1px solid #000000;
     border-radius: 12px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -162,35 +163,121 @@ h1 {
         margin-bottom: 0;
     }
 }
-
-@media (max-width: 768px) {
-    .logo {
-        width: 100%;
-        text-align: center;
+@media (min-width: 768px) and (max-width: 990px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap; /* Kartların alt alta geçmesini sağlar */
+        justify-content: center; /* Kartları yatayda merkezler */
+        gap: 20px; /* Kartlar arasında boşluk bırakır */
     }
 
-    .auth-button {
-        align-items: flex-end;
-        width: 100%;
+    .col-md-4 {
+        flex: 0 0 100%; /* Kart genişliğini %100 yap */
+        max-width: 100%; /* Kart tam genişlikte */
+        margin-bottom: 20px; /* Alt boşluk */
     }
 
-    .auth-button .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
+    .card {
+        width: 100%; /* Kart genişliği tam ekran */
+        height: auto; /* Dinamik yüksekliğe izin ver */
+        margin: 0 auto; /* Kartı merkezler */
     }
 
-    .auth-button span {
-        width: 100%;
-        text-align: right;
+    .card .card-img-top {
+        width: 100%; /* Resmi tam genişlik yap */
+        height: 200px; /* Sabit yükseklik */
+        object-fit: contain; /* Resmin taşmasını önler */
     }
-    .admin-button{
-        width: auto;
+
+    .card-title {
+        font-size: 1rem; /* Başlık boyutunu optimize et */
+        text-align: center; /* Başlığı ortala */
     }
-    h1 {
-        font-size: 1.2rem;
-        max-width: 50%;
+
+    .card-text {
+        font-size: 0.9rem; /* Metin boyutunu optimize et */
+        text-align: center; /* Metni ortala */
+        margin-bottom: 1rem;
+    }
+
+    .ratings {
+        justify-content: center; /* Yıldızları ortala */
+        margin-top: 0.5rem;
     }
 }
+
+@media (min-width: 990px) and (max-width: 1400px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap; /* Kartların alt alta geçmesini sağlar */
+        justify-content: center; /* Kartları yatayda merkezler */
+        gap: 20px; /* Kartlar arasında boşluk bırakır */
+    }
+
+    .col-md-4 {
+        flex: 0 0 calc(50% - 20px); /* Her kart genişliği %50 - boşluk */
+        max-width: calc(50% - 20px); /* Kart genişliği sınırlandırılır */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+    .stars-outer, .stars-inner, .user-rating {
+        font-size: 0.9rem; /* Yıldız boyutunu küçültür */
+    }
+
+    .ratings i {
+        font-size: 0.9rem; /* Yıldız boyutunu küçültür */
+    }
+}
+@media (max-width: 430px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap; /* Alt alta hizalama sağlar */
+        justify-content: center; /* Kartları ortalar */
+        gap: 10px; /* Kartlar arasında daha az boşluk bırakır */
+    }
+
+    .col-md-6, .col-sm-12 {
+        flex: 0 0 100%; /* Kart tam genişlik kaplar */
+        max-width: 100%; /* Kart tam genişlikte */
+        margin-bottom: 10px; /* Alt boşluk bırakır */
+    }
+
+    .card {
+        padding: 8px; /* İçeriği daha da sıkılaştırır */
+        border-radius: 6px; /* Daha az yuvarlanmış köşeler */
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    }
+
+    .card .card-img-top {
+        height: 120px; /* Daha küçük resim yüksekliği */
+        object-fit: cover; /* Resmin taşmasını önler */
+        border-radius: 6px; /* Resmi hafif yuvarlar */
+    }
+
+    .card-title {
+        font-size: 0.85rem; /* Başlık boyutunu daha da küçült */
+        text-align: center; /* Başlığı ortalar */
+        margin-bottom: 4px;
+    }
+
+    .card-text {
+        font-size: 0.75rem; /* Metin boyutunu daha da küçült */
+        text-align: center; /* Metni ortalar */
+        margin-bottom: 8px;
+    }
+
+    .ratings i {
+        font-size: 0.7rem; /* Yıldız boyutlarını daha da küçült */
+    }
+
+    .ratings {
+        justify-content: center; /* Yıldızları ortalar */
+        margin-top: 4px;
+    }
+}
+
+
+
 /* button styles */
 .btn-primary {
     background-color: #030F36;
