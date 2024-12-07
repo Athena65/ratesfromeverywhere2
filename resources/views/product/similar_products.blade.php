@@ -4,31 +4,37 @@
 
 @section('content')
     <div class="container my-5">
-        <h1 class="mb-4 text-center">{{ __('messages.similar_products') }}</h1>
-        <div class="row">
+        <h1 class="mb-4 text-center fw-bold">{{ __('messages.similar_products') }}</h1>
+        <div class="row g-4">
             @forelse($similarProducts as $product)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm rounded">
                         <!-- Ürün Resmi -->
-                        <div class="position-relative">
-                            <img src="{{ asset('storage/' . $product->image) }}"
-                                 class="card-img-top img-fluid"
-                                 alt="{{ $product->name }}"
-                                 style="max-height: 200px; object-fit: cover;">
-                        </div>
+                        <a href="{{ route('products.show', $product->id) }}">
+                            <div class="position-relative">
+                                <img src="{{ asset('storage/' . $product->image) }}"
+                                     class="card-img-top rounded-top"
+                                     alt="{{ $product->name }}"
+                                     style="height: 75%; object-fit: contain;">
+                            </div>
+                        </a>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate">{{ $product->name }}</h5>
-                            <p class="card-text text-muted small">{{ Str::limit($product->description, 100) }}</p>
-                            <a href="{{ route('products.show', $product->id) }}"
-                               class="btn btn-primary mt-auto">
-                                {{ __('messages.view_product') }}
-                            </a>
+                            <h5 class="card-title text-truncate fw-semibold mb-2">{{ $product->name }}</h5>
+                            <p class="card-text text-muted small mb-3">
+                                {{ Str::limit($product->description, 100, '...') }}
+                            </p>
+                            <!-- Ürün Değerlendirme Yıldızları -->
+                            <div class="mb-3">
+                                @include('product/product_rating_readonly', ['product' => $product])
+                            </div>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
-                    <p class="text-center text-muted">{{ __('messages.no_similar_products') }}</p>
+                    <div class="alert alert-warning text-center">
+                        {{ __('messages.no_similar_products') }}
+                    </div>
                 </div>
             @endforelse
         </div>

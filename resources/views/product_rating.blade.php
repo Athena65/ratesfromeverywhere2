@@ -1,14 +1,60 @@
-<div class="d-flex justify-content-between align-items-center mb-2">
-    <div class="d-flex align-items-center">
-        <small><strong>RFE Rating</strong></small>&nbsp;
-        <i class="fas fa-star rating-icon"></i>
-        <span class="fw-bold ms-1 site-rating"
-              data-product-id="{{ $product->id }}">{{ $product->site_rating }}</span>
-        <span class="text-muted"></span>
+<style>
+    .ratings {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+    }
+
+    .ratings i {
+        color: #cecece; /* Gri renk pasif yıldızlar için */
+        font-size: 15px; /* Yıldız boyutu */
+        margin-left: 2px; /* Yıldızlar arası boşluk */
+    }
+
+    .rating-color {
+        color: #fbc634 !important; /* Sarı renk aktif yıldızlar için */
+    }
+
+    .review-stat {
+        font-weight: 300;
+        font-size: 18px;
+        margin-bottom: 2px;
+    }
+
+    .fw-bold {
+        font-weight: bold;
+    }
+
+    .p-2 {
+        padding: 0 5px;
+    }
+</style>
+<!-- RFE Rating -->
+
+
+<div class="d-flex flex-column align-items-start mb-3">
+    <!-- Başlıklar Aynı Satırda -->
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <!-- RFE Rating Başlığı -->
+        <h5 class="review-stat fw-medium me-4">RFE Rating:</h5>
+        <!-- Your Rating Başlığı -->
+        <h5 class="review-stat fw-medium">Your Rating:</h5>
     </div>
 
-    <div class="d-flex flex-column align-items-center">
-        <small><strong>Your Rating</strong></small>
+    <!-- Altlarında Yıldızlar ve Değerler -->
+    <div class="d-flex justify-content-between align-items-start w-100 mt-2">
+        <!-- RFE Rating Yıldızlar -->
+        <div class="ratings d-flex align-items-center">
+            <span class="fw-bold p-2">{{ number_format($product->site_rating, 1) }}</span>
+            @php
+                $site_rating = round($product->site_rating); // 5 üzerinden yuvarlanan değer
+            @endphp
+            @for ($i = 1; $i <= 5; $i++)
+                <i class="fa fa-star {{ $i <= $site_rating ? 'rating-color' : '' }}"></i>
+            @endfor
+        </div>
+
+        <!-- Your Rating Yıldızlar ve Modal -->
         <div class="user-rating px-2 py-1 d-flex align-items-center"
              data-product-id="{{ $product->id }}"
              onclick="openRatingModal('{{ $product->name }}', {{ $product->id }})">
@@ -21,12 +67,18 @@
         </div>
     </div>
 </div>
-<!-- Global Rating Display (5 Stars) -->
-<small><strong>{{__('messages.global')}} {{__('messages.rating')}}</strong></small><br>
-<div class="d-flex align-items-center mb-2">
-    <div class="stars-outer me-2">
-        <div class="stars-inner"
-             style="width: {{ ($product->global_rating / 5) * 100 }}%;"></div>
+
+
+<!-- Global Rating -->
+<div class="d-flex justify-content-between align-items-center">
+    <h5 class="review-stat fw-medium">Global Rating:</h5>
+    <div class="ratings">
+        <span class="fw-bold p-2">{{ number_format($product->global_rating, 1) }}</span>
+        @php
+            $global_rating = round($product->global_rating); // 5 üzerinden yuvarlanan değer
+        @endphp
+        @for ($i = 1; $i <= 5; $i++)
+            <i class="fa fa-star {{ $i <= $global_rating ? 'rating-color' : '' }}"></i>
+        @endfor
     </div>
-    <span class="fw-bold">{{ $product->global_rating }}</span><span class="text-muted"></span>
 </div>

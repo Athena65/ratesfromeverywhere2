@@ -171,9 +171,6 @@ class ProductController extends Controller
             return back()->with('error', __('messages.product_image_not_found'));
         }
 
-        // Fetch all subcategories
-        $allSubcategories = Subcategory::pluck('name')->toArray();
-
         // Prepare the image file path
         $imagePath = storage_path('app/public/' . $product->image);
 
@@ -185,7 +182,6 @@ class ProductController extends Controller
         $response = Http::asMultipart()
             ->attach('image', file_get_contents($imagePath), 'image.jpg')
             ->post('http://127.0.0.1:5000/process-image', [
-                'all_subcategories' => json_encode($allSubcategories),
             ]);
 
         // Handle API failure
@@ -209,16 +205,42 @@ class ProductController extends Controller
             ]);
         }
 
-        // Retrieve similar products based on subcategories
-        $similarProducts = Product::whereHas('subcategories', function ($query) use ($categories) {
-            $query->whereIn('name', $categories);
+        // Map returned YOLO category IDs to site categories yolo_ids => 'site_categories'
+        $yoloToSiteCategoryMap = [
+            339 => 'Telefon',
+            304 => 'Dizüstü Bilgisayar',
+            516 => 'Tablet',
+            203 => 'Ayakkabı',
+            // Add more mappings as needed
+        ];
+
+        $mappedCategories = [];
+        foreach ($categories as $categoryId) {
+            if (isset($yoloToSiteCategoryMap[$categoryId])) {
+                $mappedCategories[] = $yoloToSiteCategoryMap[$categoryId];
+            }
+        }
+
+        // Handle the case where no mapped categories are found
+        if (empty($mappedCategories)) {
+            return view('product.similar_products', [
+                'similarProducts' => collect(),
+                'message' => __('messages.no_similar_products'),
+            ]);
+        }
+
+        // Use the mapped categories for further processing
+        $similarProducts = Product::whereHas('subcategories', function ($query) use ($mappedCategories) {
+            $query->whereIn('name', $mappedCategories);
         })->get();
 
-        // Log the result for debugging
-        logger()->info('Similar products retrieved', [
-            'categories' => $categories,
-            'similarProducts' => $similarProducts->pluck('id')->toArray(),
-        ]);
+        // if mapped categories does not contain subcategories then show main category
+        if ($similarProducts->isEmpty()) {
+            $similarProducts = Product::whereHas('categories', function ($query) use ($mappedCategories) {
+                $query->whereIn('name', $mappedCategories);
+            })->get();
+        }
+
 
         return view('product.similar_products', compact('similarProducts'));
     }
