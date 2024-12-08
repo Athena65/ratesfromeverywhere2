@@ -217,9 +217,9 @@ class ProductController extends Controller
             82 => 'Kamera', // yeterli sayida urun var
 
             // Urun yok henuz - urun eklenecek - Kategoriler var
+            113 => 'Saat',
             157 => 'Dijital Saat',
             573 => 'Duvar Saati',
-            113 => 'Saat',
             4 => 'Alarm Saati',
             // Add more mappings as needed
         ];
