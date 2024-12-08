@@ -65,7 +65,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:8112', // Image validation
             'global_rating' => 'nullable|numeric|min:0|max:5',
             'categories' => 'array|exists:categories,id', // Validate categories array
             'subcategories' => 'nullable|array|exists:subcategories,id', // Validate subcategories array
@@ -211,6 +211,16 @@ class ProductController extends Controller
             304 => 'Dizüstü Bilgisayar',
             516 => 'Tablet',
             203 => 'Ayakkabı',
+            127 => 'Klavye', // yeterli sayida urun var
+            129 => 'Mouse', // yeterli sayida urun var
+            244 => 'Kulaklık', // yeterli sayida urun var
+            82 => 'Kamera', // yeterli sayida urun var
+
+            // Urun yok henuz - urun eklenecek - Kategoriler var
+            157 => 'Dijital Saat',
+            573 => 'Duvar Saati',
+            113 => 'Saat',
+            4 => 'Alarm Saati',
             // Add more mappings as needed
         ];
 
