@@ -221,6 +221,8 @@ class ProductController extends Controller
             157 => 'Dijital Saat',
             573 => 'Duvar Saati',
             4 => 'Alarm Saati',
+            330 => 'Sağlık Ürünleri',
+
             // Add more mappings as needed
         ];
 
