@@ -15,7 +15,7 @@
                                 <img src="{{ asset('storage/' . $product->image) }}"
                                      class="card-img-top rounded-top"
                                      alt="{{ $product->name }}"
-                                     style="height: 75%; object-fit: contain;">
+                                     style="height: 100%; max-height: 500px; object-fit: contain;">
                             </div>
                         </a>
                         <div class="card-body d-flex flex-column">

@@ -110,7 +110,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'global_rating' => 'nullable|numeric|min:0|max:5',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:8112', // Image validation,
             'categories' => 'array|exists:categories,id', // Kategori doğrulama
             'subcategories' => 'nullable|array|exists:subcategories,id' // Alt kategori doğrulama
         ]);
@@ -210,20 +210,12 @@ class ProductController extends Controller
             339 => 'Telefon',
             304 => 'Dizüstü Bilgisayar',
             516 => 'Tablet',
-            203 => 'Ayakkabı',
-            127 => 'Klavye', // yeterli sayida urun var
-            129 => 'Mouse', // yeterli sayida urun var
-            244 => 'Kulaklık', // yeterli sayida urun var
-            82 => 'Kamera', // yeterli sayida urun var
-
-            // Urun yok henuz - urun eklenecek - Kategoriler var
-            113 => 'Saat',
-            157 => 'Dijital Saat',
-            573 => 'Duvar Saati',
-            4 => 'Alarm Saati',
-            330 => 'Sağlık Ürünleri',
-
-            // Add more mappings as needed
+            203 => 'Ayakkabı', # tum ayakkabılar (main category)
+            127 => 'Klavye',
+            129 => 'Mouse',
+            244 => 'Kulaklık',
+            82 => 'Kamera',
+            577 => 'Saat', # tum saatler (main category)
         ];
 
         $mappedCategories = [];
