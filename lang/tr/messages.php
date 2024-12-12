@@ -39,4 +39,11 @@ return [
     'no_similar_products' => 'Benzer ürün bulunamadı.',
     'similar_products' => 'Benzer Ürünler',
     'view_product' => 'Ürünü Görüntüle',
+    'upload_or_enter_url' => 'Bir resim yükleyin veya bir resim URL\'si girin',
+    'upload_image' => 'Resim Yükle',
+    'or_enter_image_url' => 'Veya bir resim URL\'si girin',
+    'choose_upload_method' => 'Yükleme Yöntemini Seçin',
+    'select_option' => 'Bir seçenek seçin',
+    'enter_image_url' => 'Resim URL\'si Girin',
+
 ];

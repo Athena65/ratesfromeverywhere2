@@ -81,3 +81,7 @@ Route::post('/check-user-rating', [RatingController::class, 'checkUserRating']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show'); // Belirli bir ürünün detay sayfası
 //benzerini bul icin
 Route::post('/find-similar', [ProductController::class, 'findSimilar'])->name('products.findSimilar');
+// resim yukleme görüntüleme için
+Route::get('/upload-image', [ProductController::class, 'showUploadForm'])->name('product.uploadForm');
+// Resim veya URL ile arama için
+Route::post('/find-similar-by-upload', [ProductController::class, 'findSimilarByUpload'])->name('product.findSimilarByUpload');

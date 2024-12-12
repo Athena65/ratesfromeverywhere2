@@ -39,5 +39,11 @@ return [
     'no_similar_products' => 'No similar products found.',
     'similar_products' => 'Similar products',
     'view_product' => 'Display Product',
+    'upload_or_enter_url' => 'Upload an image or enter an image URL',
+    'upload_image' => 'Upload Image',
+    'or_enter_image_url' => 'Or enter an image URL',
+    'choose_upload_method' => 'Choose Upload Method',
+    'select_option' => 'Select an option',
+    'enter_image_url' => 'Enter Image URL',
 
 ];

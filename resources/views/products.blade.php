@@ -1,5 +1,9 @@
 <div class="container my-5">
-    <h2 class="text-center mb-4">{{__('messages.ourproducts')}}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center mb-0">{{ __('messages.ourproducts') }}</h2>
+        <a href="{{ route('product.uploadForm') }}" class="btn btn-primary">{{ __('messages.find_similar') }}</a>
+    </div>
+
     <div class="row">
         @forelse($products as $product)
             <div class="col-md-4 mb-4">

@@ -65,7 +65,7 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:8112', // Image validation
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112', // Image validation
             'global_rating' => 'nullable|numeric|min:0|max:5',
             'categories' => 'array|exists:categories,id', // Validate categories array
             'subcategories' => 'nullable|array|exists:subcategories,id', // Validate subcategories array
@@ -110,7 +110,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'global_rating' => 'nullable|numeric|min:0|max:5',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif,webp|max:8112', // Image validation,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112', // Image validation,
             'categories' => 'array|exists:categories,id', // Kategori doğrulama
             'subcategories' => 'nullable|array|exists:subcategories,id' // Alt kategori doğrulama
         ]);
@@ -165,21 +165,34 @@ class ProductController extends Controller
     //benzerini bul icin
     public function findSimilar(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
+        // Eğer product_id sağlanmışsa ürün kontrolü yap
+        if ($request->product_id) {
+            $product = Product::findOrFail($request->product_id);
 
-        if (!$product->image) {
-            return back()->with('error', __('messages.product_image_not_found'));
-        }
+            if (!$product->image) {
+                return back()->with('error', __('messages.product_image_not_found'));
+            }
 
-        // Prepare the image file path
-        $imagePath = storage_path('app/public/' . $product->image);
+            // Ürün resim yolunu hazırla
+            $imagePath = storage_path('app/public/' . $product->image);
 
-        if (!file_exists($imagePath)) {
-            return back()->with('error', __('messages.product_image_not_found_on_server'));
+            if (!file_exists($imagePath)) {
+                return back()->with('error', __('messages.product_image_not_found_on_server'));
+            }
+        } elseif ($request->image_path) {
+            // Eğer image_path sağlanmışsa bu yolu kullan
+            $imagePath = $request->image_path;
+
+            if (!file_exists($imagePath)) {
+                return back()->with('error', __('messages.image_not_found_on_server'));
+            }
+        } else {
+            // Ne product_id ne de image_path sağlanmışsa hata döndür
+            return back()->with('error', __('messages.no_image_or_product_provided'));
         }
 
         // Send the image and subcategories to the Python API
-        $response = Http::asMultipart()
+        $response =  Http::asMultipart()
             ->attach('image', file_get_contents($imagePath), 'image.jpg')
             ->post('http://127.0.0.1:5000/process-image', [
             ]);
@@ -248,4 +261,47 @@ class ProductController extends Controller
 
         return view('product.similar_products', compact('similarProducts'));
     }
+
+    // Find similar products by upload
+    public function findSimilarByUpload(Request $request)
+    {
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112',
+            'url' => 'nullable|url',
+        ]);
+
+        if (!$request->hasFile('image') && !$request->url) {
+            return back()->with('error', __('messages.no_image_or_url'));
+        }
+
+        if ($request->hasFile('image')) {
+            // Resim yükleme işlemi
+            $imagePath = $request->file('image')->store('temp', 'public');
+            $absolutePath = storage_path('app/public/' . $imagePath);
+
+            // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
+            return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
+        }
+
+        if ($request->url) {
+            // URL'den resim indirme ve geçici olarak kaydetme
+            try {
+                $imageContent = Http::get($request->url)->body();
+                $tempImageName = 'temp/' . uniqid() . '.jpg';
+                Storage::disk('public')->put($tempImageName, $imageContent);
+                $absolutePath = storage_path('app/public/' . $tempImageName);
+
+                // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
+                return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
+            } catch (\Exception $e) {
+                return back()->with('error', __('messages.invalid_image_url'));
+            }
+        }
+    }
+    //show image upload form to find similar products
+    public function showUploadForm()
+    {
+        return view('product.upload_image');
+    }
+
 }
