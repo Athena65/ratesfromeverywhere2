@@ -15,14 +15,13 @@
 </head>
 <body>
 <!-- Header -->
-<header class="d-flex justify-content-between align-items-center p-3 bg-info text-white">
+<header class="d-flex justify-content-between align-items-center p-3 text-white" style="background-color:#00509E;">
     <!-- Logo ve Dil Ayarla -->
     <div class="logo d-flex align-items-center">
         <a href="/" title="Home">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhePsRBxByObW3FWQ5qDsxuflLEoRwjDooEA&s"
-                 alt="Logo" style="height: 50px;">
+            <img src="{{ asset('storage/constantimages/RFE--Logo.png') }}" alt="Logo" style="height: 75px;">
         </a>
-        <h1 class="ms-3 mb-0" style="font-size: 1.5rem; color: #333;">Rates From Everywhere</h1>
+        <h1 class="ms-3 mb-0" style="font-size: 1.5rem; color: #333;">RFE</h1>
 
         <!-- Dil Ayarla Dropdown -->
         <div class="dropdown ms-3">
