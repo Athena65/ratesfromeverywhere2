@@ -48,4 +48,16 @@ return [
     'your_rating' => 'Your Rating',
     'rfe_rating' => 'RFE Rating',
 
+    // Ürün Ekleme Talebi
+    'request_add_product' => 'Ürün Ekleme Talebi',
+    'product_name' => 'Ürün Adı',
+    'enter_product_name' => 'Ürün adını giriniz',
+    'image_url' => 'Resim URL',
+    'close' => 'Kapat',
+    'submit_request' => 'Talep Gönder',
+    'request_created' => 'Ürün ekleme talebiniz oluşturuldu.',
+    'description' => 'Açıklama',
+    'enter_description' => 'Lütfen açıklama giriniz.',
+
+
 ];

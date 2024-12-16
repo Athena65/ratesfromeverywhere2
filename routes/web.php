@@ -83,5 +83,11 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 Route::post('/find-similar', [ProductController::class, 'findSimilar'])->name('products.findSimilar');
 // resim yukleme görüntüleme için
 Route::get('/upload-image', [ProductController::class, 'showUploadForm'])->name('product.uploadForm');
+
+// Kullanici urun istekleri icin
+Route::post('/store-request', [ProductController::class, 'storeRequest'])->name('product.storeRequest');
+
 // Resim veya URL ile arama için
 Route::post('/find-similar-by-upload', [ProductController::class, 'findSimilarByUpload'])->name('product.findSimilarByUpload');
+
+

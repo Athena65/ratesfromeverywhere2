@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Subcategory;
+use App\Models\Request as ProductRequest;
 use App\Models\UserRating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -192,7 +191,7 @@ class ProductController extends Controller
         }
 
         // Send the image and subcategories to the Python API
-        $response =  Http::asMultipart()
+        $response = Http::asMultipart()
             ->attach('image', file_get_contents($imagePath), 'image.jpg')
             ->post('http://127.0.0.1:5000/process-image', [
             ]);
@@ -212,7 +211,7 @@ class ProductController extends Controller
 
         // Handle the case where no categories are found
         if (empty($categories)) {
-                return view('product.similar_products', [
+            return view('product.similar_products', [
                 'similarProducts' => collect(),
                 'message' => __('messages.no_similar_products'),
             ]);
@@ -279,6 +278,9 @@ class ProductController extends Controller
             $imagePath = $request->file('image')->store('temp', 'public');
             $absolutePath = storage_path('app/public/' . $imagePath);
 
+
+
+            session(['uploaded_image_path' => asset('storage/' . $imagePath)]); // Yüklenen resmi session'a ekle
             // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
             return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
         }
@@ -290,7 +292,7 @@ class ProductController extends Controller
                 $tempImageName = 'temp/' . uniqid() . '.jpg';
                 Storage::disk('public')->put($tempImageName, $imageContent);
                 $absolutePath = storage_path('app/public/' . $tempImageName);
-
+                session(['uploaded_image_url' => $request->url]); // URL'yi session'a ekle
                 // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
                 return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
             } catch (\Exception $e) {
@@ -298,10 +300,40 @@ class ProductController extends Controller
             }
         }
     }
+
     //show image upload form to find similar products
     public function showUploadForm()
     {
         return view('product.upload_image');
     }
 
+    // Get Product
+    public function storeRequest(Request $request)
+    {
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Resim yükleme desteği
+            'image_url' => 'nullable|url', // URL desteği
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        $imagePath = null;
+
+        // Resim yükleme işlemi
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_requests', 'public');
+        } elseif ($request->image_url) {
+            $imagePath = $request->image_url; // URL kullanımı
+        }
+
+        // Talebi veritabanına kaydet
+        ProductRequest::create([
+            'product_name' => $request->input('product_name', 'Belirtilmeyen Ürün'),
+            'image_url' => $imagePath,
+            'description' => $request->input('description'),
+            'user_id' => auth()->id(), // Kullanıcı ID'sini kaydet (opsiyonel)
+        ]);
+        // Başarı mesajıyla birlikte doğru bir route'a yönlendir
+        return redirect()->route('home')->with('success', __('messages.request_created'));
+    }
 }

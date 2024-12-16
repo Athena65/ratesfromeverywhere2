@@ -48,4 +48,14 @@ return [
     'your_rating' => 'Your Rating',
     'rfe_rating' => 'RFE Rating',
 
+    //add new product request form
+    'request_add_product' => 'Request Add Product',
+    'product_name' => 'Product Name',
+    'enter_product_name' => 'Enter product name',
+    'image_url' => 'Image URL',
+    'close' => 'Close',
+    'submit_request' => 'Submit Request',
+    'request_created' => 'Product Add Request has been created',
+    'description' => 'Description',
+    'enter_description' => 'Please Provide Description.',
 ];

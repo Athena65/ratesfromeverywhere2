@@ -9,7 +9,8 @@ export default defineConfig({
                 'resources/js/app.js',           // Main JS file
                 'resources/css/rate_modal.css',  // rate_modal.css file
                 'resources/js/rate_modal.js',    // rate_modal.js file
-                'resources/js/admin-category-subcategory.js'     // admin-category-subcategory.js file
+                'resources/js/admin-category-subcategory.js',     // admin-category-subcategory.js file
+                'resources/js/redirect_to_login.js' //Redirect to login
             ],
             refresh: true,
         }),
