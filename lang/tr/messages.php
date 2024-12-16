@@ -59,5 +59,22 @@ return [
     'description' => 'Açıklama',
     'enter_description' => 'Lütfen açıklama giriniz.',
 
-
+    // Ürün Talepleri Admin Panel
+    'product_requests' => 'Ürün Talepleri',
+    'no_requests' => 'Henüz talep yok.',
+    'image' => 'Resim',
+    'status' => 'Durum',
+    'actions' => 'İşlemler',
+    'approve' => 'Onayla',
+    'reject' => 'Reddet',
+    'request_deleted' => 'Talep başarıyla silindi.',
+    'request_rejected_and_deleted' => 'İstek reddedildi ve silindi.',
+    'request_updated' => 'İstek başarıyla güncellendi.',
+    'pending_requests' => 'Bekleyen İstekler',
+    'approved_requests' => 'Onaylanmış İstekler',
+    'approved_at' => 'Onaylanma Tarihi',
+    'delete_request' => 'İsteği Sil',
+    'cannot_delete_request' => 'Bu istek silinemez.',
+    'no_approved_requests' => 'Onaylanmış talep bulunamadı.',
+    'reject_and_delete' => 'Reddet ve Sil',
 ];

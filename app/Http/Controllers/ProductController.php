@@ -54,8 +54,15 @@ class ProductController extends Controller
                 // Alt kategoriyi alfabetik olarak sıralama için kullan
                 return optional($product->subcategories->first())->name;
             });
-        return view('admin.products.index', compact('products')); // Admin ürün sayfasına yönlendir
+        // Okunmamış talepleri al
+        // Talepleri yükleme
+        $requests = ProductRequest::all();
+        $unreadRequests = ProductRequest::where('status', 'pending')->count();
+
+        return view('admin.products.index', compact('products','unreadRequests','requests')); // Admin ürün sayfasına yönlendir
     }
+
+
 
     // Ürünü kaydeder
     public function store(Request $request)

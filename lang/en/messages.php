@@ -58,4 +58,23 @@ return [
     'request_created' => 'Product Add Request has been created',
     'description' => 'Description',
     'enter_description' => 'Please Provide Description.',
+
+    //admin panel product requests
+    'product_requests' => 'Product Requests',
+    'no_requests' => 'No requests yet.',
+    'image' => 'Image',
+    'status' => 'Status',
+    'actions' => 'Actions',
+    'approve' => 'Approve',
+    'reject' => 'Reject',
+    'request_rejected_and_deleted' => 'Request has been rejected and deleted.',
+    'request_updated' => 'Request updated successfully.',
+    'pending_requests' => 'Pending Requests',
+    'approved_requests' => 'Approved Requests',
+    'approved_at' => 'Approved At',
+    'delete_request' => 'Delete Request',
+    'request_deleted' => 'Request deleted successfully.',
+    'cannot_delete_request' => 'This request cannot be deleted.',
+    'no_approved_requests' => 'No approved requests found.',
+    'reject_and_delete' => 'Reject & Delete',
 ];

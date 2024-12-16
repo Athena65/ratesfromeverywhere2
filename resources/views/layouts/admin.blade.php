@@ -33,6 +33,15 @@
     </div>
 
     <div class="auth-button">
+        <!-- Message Icon -->
+        <a href="{{ route('admin.requests.index') }}" class="btn btn-light me-3 position-relative">
+            <i class="fas fa-envelope"></i>
+            @if(isset($unreadRequests) && $unreadRequests > 0)
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ $unreadRequests }}
+        </span>
+            @endif
+        </a>
         @if(Route::is('admin.products.index'))
             <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary me-3">{{__('messages.addnewcategory')}}</a>
             <a href="{{ route('admin.products.create') }}" class="btn btn-warning me-3">{{__('messages.addnewproduct')}}</a>
