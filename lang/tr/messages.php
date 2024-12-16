@@ -45,5 +45,7 @@ return [
     'choose_upload_method' => 'Yükleme Yöntemini Seçin',
     'select_option' => 'Bir seçenek seçin',
     'enter_image_url' => 'Resim URL\'si Girin',
+    'your_rating' => 'Your Rating',
+    'rfe_rating' => 'RFE Rating',
 
 ];

@@ -29,7 +29,7 @@
                 <!-- Remove rating button -->
                 <div style="text-align: center;">
                     <button class="btn-remove-rating mt-2" onclick="removeRating()"
-                            style="color: blue; background: none; border: none;">{{__('messages.removerating')}}
+                            style="color: cyan; background: none; border: none;">{{__('messages.removerating')}}
                     </button>
                 </div>
 

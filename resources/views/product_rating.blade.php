@@ -36,9 +36,9 @@
     <!-- Başlıklar Aynı Satırda -->
     <div class="d-flex justify-content-between align-items-center w-100">
         <!-- RFE Rating Başlığı -->
-        <h5 class="review-stat fw-medium me-4">RFE Rating:</h5>
+        <h5 class="review-stat fw-medium me-4">{{ __('messages.rfe_rating') }}:</h5>
         <!-- Your Rating Başlığı -->
-        <h5 class="review-stat fw-medium">Your Rating:</h5>
+        <h5 class="review-stat fw-medium">{{ __('messages.your_rating') }}:</h5>
     </div>
 
     <!-- Altlarında Yıldızlar ve Değerler -->

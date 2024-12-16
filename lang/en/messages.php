@@ -16,7 +16,7 @@ return [
     'backtoproductlist'=>'Back to Product List',
     'global'=>'Global',
     'rate'=>'Rate',
-    'removerating'=>'Removed Rating',
+    'removerating'=>'Remove Rating',
     'categories'=>'Categories',
     'addsubcategory' => 'Add Subcategory',
 
@@ -45,5 +45,7 @@ return [
     'choose_upload_method' => 'Choose Upload Method',
     'select_option' => 'Select an option',
     'enter_image_url' => 'Enter Image URL',
+    'your_rating' => 'Your Rating',
+    'rfe_rating' => 'RFE Rating',
 
 ];
