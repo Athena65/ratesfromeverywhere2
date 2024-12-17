@@ -59,9 +59,8 @@ class ProductController extends Controller
         $requests = ProductRequest::all();
         $unreadRequests = ProductRequest::where('status', 'pending')->count();
 
-        return view('admin.products.index', compact('products','unreadRequests','requests')); // Admin ürün sayfasına yönlendir
+        return view('admin.products.index', compact('products', 'unreadRequests', 'requests')); // Admin ürün sayfasına yönlendir
     }
-
 
 
     // Ürünü kaydeder
@@ -281,16 +280,26 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            // Resim yükleme işlemi
-            $imagePath = $request->file('image')->store('temp', 'public');
+            // Benzersiz isim oluştur
+            $imageName = 'temp/' . time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            // Önceki resmi sil
+            $oldImagePath = session('uploaded_image_path');
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+
+            // Yeni resmi kaydet
+            $imagePath = $request->file('image')->storeAs('', $imageName, 'public');
             $absolutePath = storage_path('app/public/' . $imagePath);
 
+            // Session'a yeni resmin yolunu kaydet
+            session(['uploaded_image_path' => $imagePath]);
 
-
-            session(['uploaded_image_path' => asset('storage/' . $imagePath)]); // Yüklenen resmi session'a ekle
             // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
             return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
         }
+
 
         if ($request->url) {
             // URL'den resim indirme ve geçici olarak kaydetme
@@ -299,7 +308,6 @@ class ProductController extends Controller
                 $tempImageName = 'temp/' . uniqid() . '.jpg';
                 Storage::disk('public')->put($tempImageName, $imageContent);
                 $absolutePath = storage_path('app/public/' . $tempImageName);
-                session(['uploaded_image_url' => $request->url]); // URL'yi session'a ekle
                 // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
                 return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
             } catch (\Exception $e) {
@@ -319,7 +327,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Resim yükleme desteği
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112', // Resim yükleme desteği
             'image_url' => 'nullable|url', // URL desteği
             'description' => 'nullable|string|max:1000',
         ]);
@@ -328,7 +336,15 @@ class ProductController extends Controller
 
         // Resim yükleme işlemi
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('product_requests', 'public');
+            // Benzersiz isim oluştur
+            $imageName = 'product_requests/' . time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+
+            // Önceki resmi sil
+            $oldImagePath = session('uploaded_image_path');
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+
         } elseif ($request->image_url) {
             $imagePath = $request->image_url; // URL kullanımı
         }

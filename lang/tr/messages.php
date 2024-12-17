@@ -77,4 +77,5 @@ return [
     'cannot_delete_request' => 'Bu istek silinemez.',
     'no_approved_requests' => 'Onaylanmış talep bulunamadı.',
     'reject_and_delete' => 'Reddet ve Sil',
+    'uploaded_image' => 'Eklenen Resim',
 ];

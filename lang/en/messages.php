@@ -77,4 +77,5 @@ return [
     'cannot_delete_request' => 'This request cannot be deleted.',
     'no_approved_requests' => 'No approved requests found.',
     'reject_and_delete' => 'Reject & Delete',
+    'uploaded_image' => 'Uploaded Image',
 ];
