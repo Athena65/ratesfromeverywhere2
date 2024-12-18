@@ -41,8 +41,12 @@
                             <tr>
                                 <td>{{ $request->product_name }}</td>
                                 <td>
-                                    @if($request->image_url)
-                                        <img src="{{ $request->image_url }}" alt="Image" class="img-thumbnail" style="max-height: 50px;">
+                                    @if($request->image)
+                                        <img src="{{ asset('storage/' . $request->image) }}" alt="Image" class="img-thumbnail" style="max-height: 100px;">
+                                    @elseif($request->image_url)
+                                        <img src="{{ $request->image_url }}" alt="Image" class="img-thumbnail" style="max-height: 100px;">
+                                    @else
+                                        <span class="text-muted">{{ __('messages.no_image') }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $request->description }}</td>

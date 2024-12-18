@@ -35,19 +35,15 @@
                     <div class="alert alert-warning text-center">
                         {{ __('messages.no_similar_products') }}
                     </div>
-                    <!-- Modal Tetikleme Butonu -->
+                    <!-- Yeni Sayfaya Yönlendirme -->
                     <div class="text-center mt-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productRequestModal">
+                        <a href="{{ route('product.requestForm') }}" class="btn btn-primary">
                             {{ __('messages.request_add_product') }}
-                        </button>
+                        </a>
                     </div>
                 </div>
-                <!-- Modal Dahil Et -->
-                @include('product.request_modal', [
-                    'uploaded_image_url' => session('uploaded_image_url'),
-                    'uploaded_image_path' => session('uploaded_image_path')
-                ])
             @endforelse
+
 
 
         </div>

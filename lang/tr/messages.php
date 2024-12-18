@@ -78,4 +78,5 @@ return [
     'no_approved_requests' => 'Onaylanmış talep bulunamadı.',
     'reject_and_delete' => 'Reddet ve Sil',
     'uploaded_image' => 'Eklenen Resim',
+    'no_image_or_url_provided' => 'Resim eklenmemiş veya URL girilmemiş',
 ];

@@ -12,6 +12,7 @@ class Request extends Model
     protected $fillable = [
         'product_name',
         'image_url',
+        'image',
         'status',
         'user_id',
         'description',

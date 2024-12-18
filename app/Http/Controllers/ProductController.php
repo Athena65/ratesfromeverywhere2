@@ -270,6 +270,23 @@ class ProductController extends Controller
     // Find similar products by upload
     public function findSimilarByUpload(Request $request)
     {
+        //storage service
+        $publicstorage = Storage::disk('public');
+        //session isimleri
+        $oldimage = 'uploaded_image_path';
+        $oldimageurl = 'uploaded_image_url';
+        $oldimagetempurl = 'uploaded_image_temp_path';
+
+        // Kullanıcıya özel temp klasöründen dosyaları sil
+        $userTempDir = 'temp/' . (auth()->id() ?? session()->getId());
+        if ($publicstorage->exists($userTempDir)) {
+            $publicstorage->deleteDirectory($userTempDir);
+        }
+
+
+        // Session'dan eski verileri temizle
+        session()->forget([$oldimage, $oldimageurl, $oldimagetempurl]);
+
         $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112',
             'url' => 'nullable|url',
@@ -280,21 +297,16 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('image')) {
+            $userId = auth()->id() ?? session()->getId(); // Kullanıcı ID'si veya oturum ID'si
+            $tempDir = 'temp/' . $userId;
+
             // Benzersiz isim oluştur
-            $imageName = 'temp/' . time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-
-            // Önceki resmi sil
-            $oldImagePath = session('uploaded_image_path');
-            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-                Storage::disk('public')->delete($oldImagePath);
-            }
-
-            // Yeni resmi kaydet
-            $imagePath = $request->file('image')->storeAs('', $imageName, 'public');
+            $imageName = time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $imagePath = $request->file('image')->storeAs($tempDir, $imageName, 'public');
             $absolutePath = storage_path('app/public/' . $imagePath);
 
             // Session'a yeni resmin yolunu kaydet
-            session(['uploaded_image_path' => $imagePath]);
+            session([$oldimage => $imagePath]);
 
             // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
             return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
@@ -304,10 +316,26 @@ class ProductController extends Controller
         if ($request->url) {
             // URL'den resim indirme ve geçici olarak kaydetme
             try {
-                $imageContent = Http::get($request->url)->body();
-                $tempImageName = 'temp/' . uniqid() . '.jpg';
-                Storage::disk('public')->put($tempImageName, $imageContent);
+                // Kullanıcıya özgü bir temp klasörü oluştur
+                $userTempDir = 'temp/' . (auth()->id() ?? session()->getId());
+
+                // Ana URL'yi al
+                $originalImageUrl = $request->url;
+
+                // URL'den içerik indirme
+                $imageContent = Http::get($originalImageUrl)->body();
+
+                // Geçici dosya adı oluştur ve temp klasörüne kaydet
+                $tempImageName = $userTempDir . '/' . uniqid() . '.jpg';
+                $publicstorage->put($tempImageName, $imageContent);
+
                 $absolutePath = storage_path('app/public/' . $tempImageName);
+
+                // Ana URL ve geçici dosya yolunu session'a kaydet
+                session([
+                    $oldimageurl => $originalImageUrl, // Ana URL
+                    $oldimagetempurl => $tempImageName // Geçici dosya yolu
+                ]);
                 // findSimilar fonksiyonunu çağırırken dosya yolunu gönder
                 return $this->findSimilar(new Request(['product_id' => null, 'image_path' => $absolutePath]));
             } catch (\Exception $e) {
@@ -322,41 +350,73 @@ class ProductController extends Controller
         return view('product.upload_image');
     }
 
-    // Get Product
+    public function requestForm()
+    {
+        return view('product.request_form');
+    }
+
+
+    // create product add request
     public function storeRequest(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112', // Resim yükleme desteği
-            'image_url' => 'nullable|url', // URL desteği
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        $imagePath = null;
-
-        // Resim yükleme işlemi
-        if ($request->hasFile('image')) {
-            // Benzersiz isim oluştur
-            $imageName = 'product_requests/' . time() . '_' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-
-            // Önceki resmi sil
-            $oldImagePath = session('uploaded_image_path');
-            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-                Storage::disk('public')->delete($oldImagePath);
-            }
-
-        } elseif ($request->image_url) {
-            $imagePath = $request->image_url; // URL kullanımı
+        $publicstorage = Storage::disk('public');
+        $oldimage = 'uploaded_image_path';
+        $oldimageurl = 'uploaded_image_url';
+        try {
+            // Form doğrulama
+            $request->validate([
+                'product_name' => 'required|string|max:255',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8112',
+                'image_url' => 'nullable|url',
+                'description' => 'nullable|string|max:1000',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
         }
 
-        // Talebi veritabanına kaydet
-        ProductRequest::create([
-            'product_name' => $request->input('product_name', 'Belirtilmeyen Ürün'),
-            'image_url' => $imagePath,
-            'description' => $request->input('description'),
-            'user_id' => auth()->id(), // Kullanıcı ID'sini kaydet (opsiyonel)
-        ]);
-        // Başarı mesajıyla birlikte doğru bir route'a yönlendir
-        return redirect()->route('home')->with('success', __('messages.request_created'));
+        $uploadedimg = session($oldimage);
+        $imgurl = session($oldimageurl);
+        // Image veya URL'den gelen resmi kaydetme mantığı
+        $imagePath = $uploadedimg ?: null;
+        $imageUrl = $imgurl ?: null;
+
+        if (!$imagePath && !$imageUrl) {
+            return redirect()->back()->with('error', __('messages.no_image_or_url_provided'))->withInput();
+        }
+
+        try {
+            // Eğer bir dosya yüklenmişse, dosyayı requests klasörüne taşı çünkü findsimilaybyupload içinde sesiondan siliniyor
+            if ($imagePath) {
+                $newImagePath = 'requests/' . basename($imagePath); // Yeni konum
+                $publicstorage->move($imagePath, $newImagePath); // Dosyayı taşı
+                $imagePath = $newImagePath; // Yeni yolu ayarla
+            }
+
+            // Talebi veritabanına kaydet
+            ProductRequest::create([
+                'product_name' => $request->input('product_name', 'Belirtilmeyen Ürün'),
+                'image' => $imagePath, // Dosya yolu
+                'image_url' => $imageUrl, // URL
+                'description' => $request->input('description'),
+                'user_id' => auth()->id(),
+            ]);
+
+            if ($imageUrl) {
+                $oldimagetempurl = 'uploaded_image_temp_path';
+                $oldImageTempPath = session($oldimagetempurl); // Geçici dosya
+                if ($oldImageTempPath && $publicstorage->exists($oldImageTempPath)) {
+                    $publicstorage->delete($oldImageTempPath);
+                }
+            }
+
+            // Başarı mesajıyla yönlendir
+            return redirect()->route('home')->with('success', __('messages.request_created'));
+        } catch (\Exception $e) {
+
+            // Hata durumunda kullanıcıya mesaj göster
+            return redirect()->back()->with('error', __('messages.request_failed') . ': ' . $e->getMessage())->withInput();
+        }
     }
+
+
 }

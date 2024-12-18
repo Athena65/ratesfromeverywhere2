@@ -78,4 +78,5 @@ return [
     'no_approved_requests' => 'No approved requests found.',
     'reject_and_delete' => 'Reject & Delete',
     'uploaded_image' => 'Uploaded Image',
+    'no_image_or_url_provided' => 'No image provided or URL provided.',
 ];
