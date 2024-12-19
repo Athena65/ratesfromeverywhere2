@@ -15,7 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Her saat başı clear:temp komutunu çalıştır
+        $schedule->command('clear:temp')->hourly();
+        // sudo crontab -e
+        // * * * * * cd /path/to/laravel && php artisan schedule:run >> /dev/null 2>&1
+        // add cron job with this command , unfortunately it is not possible on local development
     }
 
     /**

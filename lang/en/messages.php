@@ -79,4 +79,5 @@ return [
     'reject_and_delete' => 'Reject & Delete',
     'uploaded_image' => 'Uploaded Image',
     'no_image_or_url_provided' => 'No image provided or URL provided.',
+    'invalid_image_url'=> 'Invalid image URL provided',
 ];
