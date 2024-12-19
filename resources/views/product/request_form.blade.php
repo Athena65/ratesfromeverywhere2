@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        <form action="{{ route('product.storeRequest') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('product.storeRequest') }}" id="productRequestForm" method="POST" enctype="multipart/form-data">
             @csrf
             <!-- Ürün Adı -->
             <div class="mb-3">
@@ -64,3 +64,8 @@
         </form>
     </div>
 @endsection
+<script>
+    window.isAuthenticated = @json(auth()->check()); // Kullanıcı giriş durumunu JavaScript'e aktarır
+    window.loginUrl = "{{ route('login') }}"; // Laravel'in login URL'sini aktarır
+</script>
+@vite('resources/js/redirect_to_login.js')
