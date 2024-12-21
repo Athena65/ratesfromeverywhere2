@@ -6,6 +6,9 @@
     <title>@yield('title', 'RFE - Yönetim Paneli')</title>
     <!-- Yıldızlar için ve diğer özel stiller -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <link rel="icon" href="{{ asset('storage/constantimages/RFE--Logo.png') }}">
+
     <!-- Bootstrap and Font Awesome Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>

@@ -164,107 +164,163 @@ class ProductController extends Controller
             ->where('user_id', $userId)
             ->value('user_rate');
 
+        // Global değerlendirme bilgilerini al - simdilik yorumda.
+        /*try {
+            $globalRating = $this->getGlobalRating($product->name);
+
+            // Ürüne global rating bilgilerini ekle
+            $product->global_rating = $globalRating['rating'];
+            $product->global_reviews = $globalRating['reviews'];
+        } catch (\Exception $e) {
+            // Eğer global rating alınamazsa varsayılan değerler ekle
+            $product->global_rating = null; // Veya bir varsayılan değer
+            $product->global_reviews = 0;  // Veya bir varsayılan değer
+
+            // Hata loglama
+            \Log::error("Global rating alınamadı: " . $e->getMessage());
+        }*/
+
         return view('product.show', compact('product'));
     }
+
+    // genel degerlendirmeyi al
+    protected function getGlobalRating($productName)
+    {
+        try {
+            // Python API'ye ürün adı göndererek global rating al
+            $response = Http::post('http://127.0.0.1:5000/get_global_rating', [
+                'product_name' => $productName,
+            ]);
+
+            // Global değerlendirme bilgilerini döndür
+            if ($response->successful()) {
+                return $response->json(); // ['rating' => ..., 'reviews' => ...]
+            }
+
+            // Başarısız olursa varsayılan değerleri döndür
+            return [
+                'rating' => null,
+                'reviews' => 0,
+            ];
+        } catch (\Exception $e) {
+            // Hata loglama
+            \Log::error("Global rating API çağrısı başarısız: " . $e->getMessage());
+
+            // Varsayılan değerleri döndür
+            return [
+                'rating' => null,
+                'reviews' => 0,
+            ];
+        }
+    }
+
 
     //benzerini bul icin
     public function findSimilar(Request $request)
     {
-        // Eğer product_id sağlanmışsa ürün kontrolü yap
-        if ($request->product_id) {
-            $product = Product::findOrFail($request->product_id);
+        try {
+            // Eğer product_id sağlanmışsa ürün kontrolü yap
+            if ($request->product_id) {
+                $product = Product::findOrFail($request->product_id);
 
-            if (!$product->image) {
-                return back()->with('error', __('messages.product_image_not_found'));
+                if (!$product->image) {
+                    return back()->with('error', __('messages.product_image_not_found'));
+                }
+
+                // Ürün resim yolunu hazırla
+                $imagePath = storage_path('app/public/' . $product->image);
+
+                if (!file_exists($imagePath)) {
+                    return back()->with('error', __('messages.product_image_not_found_on_server'));
+                }
+            } elseif ($request->image_path) {
+                // Eğer image_path sağlanmışsa bu yolu kullan
+                $imagePath = $request->image_path;
+
+                if (!file_exists($imagePath)) {
+                    return back()->with('error', __('messages.image_not_found_on_server'));
+                }
+            } else {
+                // Ne product_id ne de image_path sağlanmışsa hata döndür
+                return back()->with('error', __('messages.no_image_or_product_provided'));
             }
 
-            // Ürün resim yolunu hazırla
-            $imagePath = storage_path('app/public/' . $product->image);
+            // Send the image and subcategories to the Python API
+            $response = Http::asMultipart()
+                ->attach('image', file_get_contents($imagePath), 'image.jpg')
+                ->post('http://127.0.0.1:5000/process-image', [
+                ]);
 
-            if (!file_exists($imagePath)) {
-                return back()->with('error', __('messages.product_image_not_found_on_server'));
+            // Handle API failure
+            if ($response->failed()) {
+                logger()->error('Python API request failed', [
+                    'response' => $response->body(),
+                    'status' => $response->status(),
+                ]);
+                return back()->with('error', __('messages.error_processing_image'));
             }
-        } elseif ($request->image_path) {
-            // Eğer image_path sağlanmışsa bu yolu kullan
-            $imagePath = $request->image_path;
 
-            if (!file_exists($imagePath)) {
-                return back()->with('error', __('messages.image_not_found_on_server'));
+
+            // Extract categories from the API response
+            $categories = $response->json()['categories'] ?? [];
+
+            // Handle the case where no categories are found
+            if (empty($categories)) {
+                return view('product.similar_products', [
+                    'similarProducts' => collect(),
+                    'message' => __('messages.no_similar_products'),
+                ]);
             }
-        } else {
-            // Ne product_id ne de image_path sağlanmışsa hata döndür
-            return back()->with('error', __('messages.no_image_or_product_provided'));
-        }
 
-        // Send the image and subcategories to the Python API
-        $response = Http::asMultipart()
-            ->attach('image', file_get_contents($imagePath), 'image.jpg')
-            ->post('http://127.0.0.1:5000/process-image', [
-            ]);
+            // Map returned YOLO category IDs to site categories yolo_ids => 'site_categories'
+            $yoloToSiteCategoryMap = [
+                339 => 'Telefon',
+                304 => 'Dizüstü Bilgisayar',
+                516 => 'Tablet',
+                203 => 'Ayakkabı', # tum ayakkabılar (main category)
+                127 => 'Klavye',
+                129 => 'Mouse',
+                244 => 'Kulaklık',
+                82 => 'Kamera',
+                577 => 'Saat', # tum saatler (main category)
+            ];
 
-        // Handle API failure
-        if ($response->failed()) {
-            logger()->error('Python API request failed', [
-                'response' => $response->body(),
-                'status' => $response->status(),
-            ]);
-            return back()->with('error', __('messages.error_processing_image'));
-        }
-
-
-        // Extract categories from the API response
-        $categories = $response->json()['categories'] ?? [];
-
-        // Handle the case where no categories are found
-        if (empty($categories)) {
-            return view('product.similar_products', [
-                'similarProducts' => collect(),
-                'message' => __('messages.no_similar_products'),
-            ]);
-        }
-
-        // Map returned YOLO category IDs to site categories yolo_ids => 'site_categories'
-        $yoloToSiteCategoryMap = [
-            339 => 'Telefon',
-            304 => 'Dizüstü Bilgisayar',
-            516 => 'Tablet',
-            203 => 'Ayakkabı', # tum ayakkabılar (main category)
-            127 => 'Klavye',
-            129 => 'Mouse',
-            244 => 'Kulaklık',
-            82 => 'Kamera',
-            577 => 'Saat', # tum saatler (main category)
-        ];
-
-        $mappedCategories = [];
-        foreach ($categories as $categoryId) {
-            if (isset($yoloToSiteCategoryMap[$categoryId])) {
-                $mappedCategories[] = $yoloToSiteCategoryMap[$categoryId];
+            $mappedCategories = [];
+            foreach ($categories as $categoryId) {
+                if (isset($yoloToSiteCategoryMap[$categoryId])) {
+                    $mappedCategories[] = $yoloToSiteCategoryMap[$categoryId];
+                }
             }
-        }
 
-        // Handle the case where no mapped categories are found
-        if (empty($mappedCategories)) {
-            return view('product.similar_products', [
-                'similarProducts' => collect(),
-                'message' => __('messages.no_similar_products'),
-            ]);
-        }
+            // Handle the case where no mapped categories are found
+            if (empty($mappedCategories)) {
+                return view('product.similar_products', [
+                    'similarProducts' => collect(),
+                    'message' => __('messages.no_similar_products'),
+                ]);
+            }
 
-        // Use the mapped categories for further processing
-        $similarProducts = Product::whereHas('subcategories', function ($query) use ($mappedCategories) {
-            $query->whereIn('name', $mappedCategories);
-        })->get();
-
-        // if mapped categories does not contain subcategories then show main category
-        if ($similarProducts->isEmpty()) {
-            $similarProducts = Product::whereHas('categories', function ($query) use ($mappedCategories) {
+            // Use the mapped categories for further processing
+            $similarProducts = Product::whereHas('subcategories', function ($query) use ($mappedCategories) {
                 $query->whereIn('name', $mappedCategories);
             })->get();
+
+            // if mapped categories does not contain subcategories then show main category
+            if ($similarProducts->isEmpty()) {
+                $similarProducts = Product::whereHas('categories', function ($query) use ($mappedCategories) {
+                    $query->whereIn('name', $mappedCategories);
+                })->get();
+            }
+
+
+            return view('product.similar_products', compact('similarProducts'));
+        } catch (\Exception $e) {
+            // Hata loglama
+            \Log::error("Benzerini bul işlemi başarısız: " . $e->getMessage());
+            $similarProducts = [];
+            return view('product.similar_products', compact('similarProducts'));
         }
 
-
-        return view('product.similar_products', compact('similarProducts'));
     }
 
     // Find similar products by upload

@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Rates From Everywhere')</title>
+    <!-- ajax csrf korumasi -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- yildizlar icin -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <link rel="icon" href="{{ asset('storage/constantimages/RFE--Logo.png') }}">
     <!-- Bootstrap and Font Awesome Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <!-- ajax csrf korumasi -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 <body>
 <!-- Header -->
