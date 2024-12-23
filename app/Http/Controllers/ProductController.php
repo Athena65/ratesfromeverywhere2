@@ -183,36 +183,31 @@ class ProductController extends Controller
         return view('product.show', compact('product'));
     }
 
-    // genel degerlendirmeyi al
+    // Genel değerlendirme bilgilerini al
     protected function getGlobalRating($productName)
     {
-        try {
-            // Python API'ye ürün adı göndererek global rating al
+        /* method changed  try {
             $response = Http::post('http://127.0.0.1:5000/get_global_rating', [
                 'product_name' => $productName,
             ]);
 
-            // Global değerlendirme bilgilerini döndür
             if ($response->successful()) {
-                return $response->json(); // ['rating' => ..., 'reviews' => ...]
+                $allRatings = $response->json(); // Her site için sonuçları al
+
+                foreach ($allRatings as $site => $ratingInfo) {
+                    \Log::info("Site: $site, Rating: {$ratingInfo['rating']}, Reviews: {$ratingInfo['reviews']}");
+                }
+
+                return $allRatings;
             }
 
-            // Başarısız olursa varsayılan değerleri döndür
-            return [
-                'rating' => null,
-                'reviews' => 0,
-            ];
+            return [];
         } catch (\Exception $e) {
-            // Hata loglama
             \Log::error("Global rating API çağrısı başarısız: " . $e->getMessage());
-
-            // Varsayılan değerleri döndür
-            return [
-                'rating' => null,
-                'reviews' => 0,
-            ];
-        }
+            return [];
+        }*/
     }
+
 
 
     //benzerini bul icin
