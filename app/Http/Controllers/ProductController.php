@@ -6,9 +6,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Request as ProductRequest;
 use App\Models\UserRating;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // for form requests
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http; // for post request
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -82,12 +82,15 @@ class ProductController extends Controller
         // Calculate the initial site rating based on user ratings
         $initialSiteRating = UserRating::where('product_id', $request->id)->avg('user_rate') ?? 0;
 
+        // Format the global_rating to two decimal places
+        $globalRating = $request->global_rating ? number_format($request->global_rating, 2) : 0;
+
         // Create the product
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'image' => $imagePath,
-            'global_rating' => $request->global_rating ?? 0,
+            'global_rating' => $globalRating,
             'site_rating' => $initialSiteRating,
         ]);
 
@@ -158,55 +161,16 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+
         // Her ürün için kullanıcının verdiği puanı ilişkilendirin
-        $userId = Auth::id(); // Mevcut kullanıcı ID'si
+        $userId = Auth::id();
         $product->user_rating = UserRating::where('product_id', $product->id)
             ->where('user_id', $userId)
             ->value('user_rate');
 
-        // Global değerlendirme bilgilerini al - simdilik yorumda.
-        /*try {
-            $globalRating = $this->getGlobalRating($product->name);
-
-            // Ürüne global rating bilgilerini ekle
-            $product->global_rating = $globalRating['rating'];
-            $product->global_reviews = $globalRating['reviews'];
-        } catch (\Exception $e) {
-            // Eğer global rating alınamazsa varsayılan değerler ekle
-            $product->global_rating = null; // Veya bir varsayılan değer
-            $product->global_reviews = 0;  // Veya bir varsayılan değer
-
-            // Hata loglama
-            \Log::error("Global rating alınamadı: " . $e->getMessage());
-        }*/
-
         return view('product.show', compact('product'));
     }
 
-    // Genel değerlendirme bilgilerini al
-    protected function getGlobalRating($productName)
-    {
-        /* method changed  try {
-            $response = Http::post('http://127.0.0.1:5000/get_global_rating', [
-                'product_name' => $productName,
-            ]);
-
-            if ($response->successful()) {
-                $allRatings = $response->json(); // Her site için sonuçları al
-
-                foreach ($allRatings as $site => $ratingInfo) {
-                    \Log::info("Site: $site, Rating: {$ratingInfo['rating']}, Reviews: {$ratingInfo['reviews']}");
-                }
-
-                return $allRatings;
-            }
-
-            return [];
-        } catch (\Exception $e) {
-            \Log::error("Global rating API çağrısı başarısız: " . $e->getMessage());
-            return [];
-        }*/
-    }
 
 
 

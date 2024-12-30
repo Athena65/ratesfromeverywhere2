@@ -69,5 +69,23 @@
 </div>
 
 
-<!-- Include the Global Rating -->
-@include('product.product_global_rating', ['product' => $product])
+<!-- Global Rating -->
+<div class="d-flex justify-content-between align-items-center">
+    <h5 class="review-stat fw-medium">Global Rating:</h5>
+    <div class="ratings">
+        @php
+            // Eğer tam sayı ise .00 göstermeden yaz, değilse uygun formatla
+            $globalRating = (intval($product->global_rating) == $product->global_rating)
+                ? intval($product->global_rating) // Tam sayıysa
+                : (round($product->global_rating, 2) == round($product->global_rating, 1) ? round($product->global_rating, 1) : number_format($product->global_rating, 2)); // Değilse uygun yuvarlama
+        @endphp
+        <span class="fw-bold p-2">{{ $globalRating }}</span>
+
+        @php
+            $global_rating = round($product->global_rating); // 5 üzerinden yuvarlanan değer
+        @endphp
+        @for ($i = 1; $i <= 5; $i++)
+            <i class="fa fa-star {{ $i <= $global_rating ? 'rating-color' : '' }}"></i>
+        @endfor
+    </div>
+</div>

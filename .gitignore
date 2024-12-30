@@ -38,3 +38,4 @@ Thumbs.db            # Windows
 
 /public/hot
 /public/build
+.idea/

@@ -31,7 +31,7 @@
                             @include('partials.categories.display')
 
                             <!-- Ürün Puanlama -->
-                            @include('product_rating', ['product' => $product])
+                            @include('product.rating_for_home_page', ['product' => $product])
                         </div>
                     </div>
                 </div>

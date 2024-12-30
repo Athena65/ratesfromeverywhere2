@@ -41,7 +41,14 @@
 <div class="mt-1 d-flex justify-content-between align-items-center">
     <h5 class="review-stat fw-medium">Global Rating:</h5>
     <div class="ratings">
-        <span class="fw-bold p-2">{{ number_format($product->global_rating, 1) }}</span>
+        @php
+            // Eğer tam sayı ise .00 göstermeden yaz, değilse uygun formatla
+            $globalRating = (intval($product->global_rating) == $product->global_rating)
+                ? intval($product->global_rating) // Tam sayıysa
+                : (round($product->global_rating, 2) == round($product->global_rating, 1) ? round($product->global_rating, 1) : number_format($product->global_rating, 2)); // Değilse uygun yuvarlama
+        @endphp
+        <span class="fw-bold p-2">{{ $globalRating }}</span>
+
         @php
             $global_rating = round($product->global_rating); // 5 üzerinden yuvarlanan değer
         @endphp

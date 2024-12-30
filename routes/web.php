@@ -92,4 +92,4 @@ Route::get('/upload-image', [ProductController::class, 'showUploadForm'])->name(
 Route::post('/store-request', [ProductController::class, 'storeRequest'])->name('product.storeRequest'); // Kullanici urun istekleri icin
 Route::post('/find-similar-by-upload', [ProductController::class, 'findSimilarByUpload'])->name('product.findSimilarByUpload'); // Resim veya URL ile arama için
 Route::get('/product/request-form', [ProductController::class, 'requestForm'])->name('product.requestForm'); //request formuna yonlendir
-
+Route::post('/api/get-global-rating', [RatingController::class, 'getGlobalRating']); //Get Global Rating
