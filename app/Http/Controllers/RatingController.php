@@ -115,7 +115,7 @@ class RatingController extends Controller
 
             return response()->json(['average_rating' => 'Henüz değerlendirilmemiş'], 200);
         } catch (\Exception $e) {
-            \Log::error("Error fetching global rating: " . $e->getMessage());
+            \Log::error("Error fetching global rating, to see error look python run console "); // removed $e->getMessage() cuz long error logs.
 
             // Ürünün mevcut global_rating değerini döndür
             $product = Product::find($productId);
