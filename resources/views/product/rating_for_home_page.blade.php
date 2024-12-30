@@ -6,7 +6,7 @@
     }
 
     .ratings i {
-        color: #cecece; /* Gri renk pasif yıldızlar için */
+        color: floralwhite; /* Gri renk pasif yıldızlar için */
         font-size: 15px; /* Yıldız boyutu */
         margin-left: 2px; /* Yıldızlar arası boşluk */
     }
@@ -47,12 +47,22 @@
         <div class="ratings d-flex align-items-center">
             <span class="fw-bold p-2">{{ number_format($product->site_rating, 1) }}</span>
             @php
-                $site_rating = round($product->site_rating); // 5 üzerinden yuvarlanan değer
+                $site_rating = $product->site_rating; // Orijinal değerlendirme
+                $full_stars = floor($site_rating); // Tam yıldız sayısı
+                $has_half_star = ($site_rating - $full_stars) >= 0.5; // Yarım yıldız var mı
+                $empty_stars = 5 - $full_stars - ($has_half_star ? 1 : 0); // Gri yıldız sayısı
             @endphp
-            @for ($i = 1; $i <= 5; $i++)
-                <i class="fa fa-star {{ $i <= $site_rating ? 'rating-color' : '' }}"></i>
+            @for ($i = 1; $i <= $full_stars; $i++)
+                <i class="fa fa-star rating-color"></i>
+            @endfor
+            @if ($has_half_star)
+                <i class="fa fa-star-half-alt rating-color"></i>
+            @endif
+            @for ($i = 1; $i <= $empty_stars; $i++)
+                <i class="fa fa-star"></i>
             @endfor
         </div>
+
 
         <!-- Your Rating Yıldızlar ve Modal -->
         <div class="user-rating px-2 py-1 d-flex align-items-center"
@@ -78,14 +88,26 @@
             $globalRating = (intval($product->global_rating) == $product->global_rating)
                 ? intval($product->global_rating) // Tam sayıysa
                 : (round($product->global_rating, 2) == round($product->global_rating, 1) ? round($product->global_rating, 1) : number_format($product->global_rating, 2)); // Değilse uygun yuvarlama
+
+            $full_stars = floor($product->global_rating); // Tam yıldız sayısı
+            $has_half_star = ($product->global_rating - $full_stars) >= 0.5; // Yarım yıldız var mı
+            $empty_stars = 5 - $full_stars - ($has_half_star ? 1 : 0); // Gri yıldız sayısı
         @endphp
         <span class="fw-bold p-2">{{ $globalRating }}</span>
 
-        @php
-            $global_rating = round($product->global_rating); // 5 üzerinden yuvarlanan değer
-        @endphp
-        @for ($i = 1; $i <= 5; $i++)
-            <i class="fa fa-star {{ $i <= $global_rating ? 'rating-color' : '' }}"></i>
+        <!-- Tam Yıldızlar -->
+        @for ($i = 1; $i <= $full_stars; $i++)
+            <i class="fa fa-star rating-color"></i>
+        @endfor
+
+        <!-- Yarım Yıldız -->
+        @if ($has_half_star)
+            <i class="fa fa-star-half-alt rating-color"></i>
+        @endif
+
+        <!-- Gri Yıldızlar -->
+        @for ($i = 1; $i <= $empty_stars; $i++)
+            <i class="fa fa-star"></i>
         @endfor
     </div>
 </div>

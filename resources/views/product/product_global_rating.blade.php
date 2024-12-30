@@ -94,26 +94,27 @@
                 $globalRating = (intval($product->global_rating) == $product->global_rating)
                     ? intval($product->global_rating) // Tam sayıysa
                     : (round($product->global_rating, 2) == round($product->global_rating, 1) ? round($product->global_rating, 1) : number_format($product->global_rating, 2)); // Değilse uygun yuvarlama
+
+                $full_stars = floor($product->global_rating); // Tam yıldız sayısı
+                $has_half_star = ($product->global_rating - $full_stars) >= 0.5; // Yarım yıldız var mı
+                $empty_stars = 5 - $full_stars - ($has_half_star ? 1 : 0); // Gri yıldız sayısı
             @endphp
-            <span id="global-rating-{{ $product->id }}" class="fw-bold me-2">
-                {{ $globalRating }}
-            </span>
+            <span id="global-rating-{{ $product->id }}" class="fw-bold p-2">{{ $globalRating }}</span>
+
             <div id="stars-{{ $product->id }}" class="d-inline-flex">
-                @for ($i = 1; $i <= 5; $i++)
-                    @if ($i <= floor($product->global_rating))
-                        <div class="star-container position-relative">
-                            <i class="fa fa-star full-star"></i>
-                        </div>
-                    @elseif ($i === ceil($product->global_rating) && $product->global_rating - floor($product->global_rating) > 0)
-                        <div class="star-container position-relative">
-                            <i class="fa fa-star full-star"></i>
-                            <div class="partial-star" style="width: {{ ($product->global_rating - floor($product->global_rating)) * 100 }}%;"></div>
-                        </div>
-                    @else
-                        <div class="star-container position-relative">
-                            <i class="fa fa-star"></i>
-                        </div>
-                    @endif
+                <!-- Tam Yıldızlar -->
+                @for ($i = 1; $i <= $full_stars; $i++)
+                    <i class="fa fa-star rating-color"></i>
+                @endfor
+
+                <!-- Yarım Yıldız -->
+                @if ($has_half_star)
+                    <i class="fa fa-star-half-alt rating-color"></i>
+                @endif
+
+                <!-- Gri Yıldızlar -->
+                @for ($i = 1; $i <= $empty_stars; $i++)
+                    <i class="fa fa-star" style="color:floralwhite"></i>
                 @endfor
             </div>
         </div>

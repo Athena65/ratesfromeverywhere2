@@ -92,7 +92,7 @@ class RatingController extends Controller
                 $count = 0;
 
                 foreach ($allRatings as $ratingInfo) {
-                    if (isset($ratingInfo['rating'])) {
+                    if (isset($ratingInfo['rating']) && $ratingInfo['rating'] !== 'Not Found') {
                         // Virgüllü formatı noktaya çevir ve float olarak al
                         $rating = floatval(str_replace(',', '.', $ratingInfo['rating']));
                         $totalRating += $rating;
@@ -100,8 +100,14 @@ class RatingController extends Controller
                     }
                 }
 
-                // Ortalama hesapla
-                $averageRating = $count > 0 ? $totalRating / $count : 0;
+                // Eğer en az bir geçerli değer varsa ortalama hesapla, yoksa ilk geçerli değeri al
+                if ($count > 0) {
+                    $averageRating = $totalRating / $count;
+                } elseif ($count === 0 && count(array_filter($allRatings, fn($ratingInfo) => isset($ratingInfo['rating']) && $ratingInfo['rating'] !== 'Not Found')) === 1) {
+                    $averageRating = floatval(str_replace(',', '.', current(array_filter($allRatings, fn($ratingInfo) => $ratingInfo['rating'] !== 'Not Found'))['rating']));
+                } else {
+                    throw new \Exception('All ratings are Not Found');
+                }
 
                 // Update the product's global rating in the database
                 $product = Product::findOrFail($productId);

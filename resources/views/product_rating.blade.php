@@ -6,7 +6,7 @@
     }
 
     .ratings i {
-        color: #cecece; /* Gri renk pasif yıldızlar için */
+        color: floralwhite; /* Gri renk pasif yıldızlar için */
         font-size: 15px; /* Yıldız boyutu */
         margin-left: 2px; /* Yıldızlar arası boşluk */
     }
@@ -47,10 +47,19 @@
         <div class="ratings d-flex align-items-center">
             <span class="fw-bold p-2">{{ number_format($product->site_rating, 1) }}</span>
             @php
-                $site_rating = round($product->site_rating); // 5 üzerinden yuvarlanan değer
+                $site_rating = $product->site_rating; // Orijinal değerlendirme
+                $full_stars = floor($site_rating); // Tam yıldız sayısı
+                $has_half_star = ($site_rating - $full_stars) >= 0.5; // Yarım yıldız var mı
+                $empty_stars = 5 - $full_stars - ($has_half_star ? 1 : 0); // Gri yıldız sayısı
             @endphp
-            @for ($i = 1; $i <= 5; $i++)
-                <i class="fa fa-star {{ $i <= $site_rating ? 'rating-color' : '' }}"></i>
+            @for ($i = 1; $i <= $full_stars; $i++)
+                <i class="fa fa-star rating-color"></i>
+            @endfor
+            @if ($has_half_star)
+                <i class="fa fa-star-half-alt rating-color"></i>
+            @endif
+            @for ($i = 1; $i <= $empty_stars; $i++)
+                <i class="fa fa-star"></i>
             @endfor
         </div>
 

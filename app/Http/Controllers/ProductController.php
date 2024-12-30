@@ -205,7 +205,7 @@ class ProductController extends Controller
             }
 
             // Send the image and subcategories to the Python API
-            $response = Http::asMultipart()
+            $response = Http::timeout(10)->asMultipart()
                 ->attach('image', file_get_contents($imagePath), 'image.jpg')
                 ->post('http://127.0.0.1:5000/process-image', [
                 ]);
