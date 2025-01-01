@@ -120,70 +120,83 @@
         </div>
     </div>
 </div>
-
 <script>
-    document.querySelectorAll('.btn.btn-primary').forEach(button => {
-        button.addEventListener('click', function () {
-            const productId = this.id.split('-')[2]; // Extract the product ID from the button ID
-            const productName = this.getAttribute('data-product-name'); // Get the product name from the data attribute
-            const globalRatingElement = document.getElementById(`global-rating-${productId}`);
-            const starsContainer = document.getElementById(`stars-${productId}`);
+    document.addEventListener('DOMContentLoaded', function () {
+        // PHP'den alınan giriş durumunu doğru şekilde kontrol edin
 
-            // Show loading animation
-            const loading = document.getElementById(`loading-${productId}`);
-            loading.classList.remove('d-none');
+        document.querySelectorAll('.btn.btn-primary').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const loginUrl = "{{ route('login') }}"; // Giriş yap sayfası URL'si
+                const isAuthenticated = @json(auth()->check()); // Kullanıcı giriş durumunu JavaScript'e aktarır
+                // Giriş kontrolü
+                if (!isAuthenticated) {
+                    e.preventDefault(); // Tıklamayı engelle
+                    alert('Bu işlemi gerçekleştirmek için lütfen giriş yapın.');
+                    window.location.href = loginUrl; // Giriş sayfasına yönlendir
+                    return; // Fonksiyondan çık
+                }
 
-            // Perform AJAX request
-            fetch('/api/get-global-rating', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    product_name: productName // Include product name in the request
+                const productId = this.id.split('-')[2]; // Extract the product ID from the button ID
+                const productName = this.getAttribute('data-product-name'); // Get the product name from the data attribute
+                const globalRatingElement = document.getElementById(`global-rating-${productId}`);
+                const starsContainer = document.getElementById(`stars-${productId}`);
+
+                // Show loading animation
+                const loading = document.getElementById(`loading-${productId}`);
+                loading.classList.remove('d-none');
+
+                // Perform AJAX request
+                fetch('/api/get-global-rating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        product_name: productName // Include product name in the request
+                    })
                 })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Update the global rating
-                    const averageRating = parseFloat(data.average_rating); // toFixed yerine doğrudan parseFloat kullanıldı
-                    globalRatingElement.textContent = averageRating;
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the global rating
+                        const averageRating = parseFloat(data.average_rating); // toFixed yerine doğrudan parseFloat kullanıldı
+                        globalRatingElement.textContent = averageRating;
 
-                    // Update the stars
-                    const fullStars = Math.floor(averageRating);
-                    const partialStarWidth = (averageRating - fullStars) * 100;
-                    starsContainer.innerHTML = '';
+                        // Update the stars
+                        const fullStars = Math.floor(averageRating);
+                        const partialStarWidth = (averageRating - fullStars) * 100;
+                        starsContainer.innerHTML = '';
 
-                    for (let i = 1; i <= 5; i++) {
-                        if (i <= fullStars) {
-                            starsContainer.innerHTML += `
-            <div class="star-container">
-                <i class="fa fa-star full-star"></i>
-            </div>`;
-                        } else if (i === fullStars + 1 && partialStarWidth > 0) {
-                            starsContainer.innerHTML += `
-            <div class="star-container">
-                <i class="fa fa-star full-star"></i>
-                <div class="partial-star" style="width: ${partialStarWidth}%;"></div>
-            </div>`;
-                        } else {
-                            starsContainer.innerHTML += `
-            <div class="star-container">
-                <i class="fa fa-star"></i>
-            </div>`;
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= fullStars) {
+                                starsContainer.innerHTML += `
+                <div class="star-container">
+                    <i class="fa fa-star full-star"></i>
+                </div>`;
+                            } else if (i === fullStars + 1 && partialStarWidth > 0) {
+                                starsContainer.innerHTML += `
+                <div class="star-container">
+                    <i class="fa fa-star full-star"></i>
+                    <div class="partial-star" style="width: ${partialStarWidth}%;"></div>
+                </div>`;
+                            } else {
+                                starsContainer.innerHTML += `
+                <div class="star-container">
+                    <i class="fa fa-star"></i>
+                </div>`;
+                            }
                         }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching global rating:', error);
-                    alert('Failed to update global rating.');
-                })
-                .finally(() => {
-                    // Hide loading animation
-                    loading.classList.add('d-none');
-                });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching global rating:', error);
+                        alert('Failed to update global rating.');
+                    })
+                    .finally(() => {
+                        // Hide loading animation
+                        loading.classList.add('d-none');
+                    });
+            });
         });
     });
 </script>
