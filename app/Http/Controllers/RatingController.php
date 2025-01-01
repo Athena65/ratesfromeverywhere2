@@ -93,20 +93,24 @@ class RatingController extends Controller
 
                 foreach ($allRatings as $ratingInfo) {
                     if (isset($ratingInfo['rating']) && $ratingInfo['rating'] !== 'Not Found') {
-                        // Virgüllü formatı noktaya çevir ve float olarak al
-                        $rating = floatval(str_replace(',', '.', $ratingInfo['rating']));
-                        $totalRating += $rating;
+                        // Hem virgüllü hem noktalı formatı normalize et ve float olarak al
+                        $normalizedRating = floatval(str_replace(',', '.', $ratingInfo['rating']));
+                        $totalRating += $normalizedRating;
                         $count++;
                     }
                 }
 
-                // Eğer en az bir geçerli değer varsa ortalama hesapla, yoksa ilk geçerli değeri al
+                // Eğer en az bir geçerli değer varsa ortalama hesapla
                 if ($count > 0) {
                     $averageRating = $totalRating / $count;
-                } elseif ($count === 0 && count(array_filter($allRatings, fn($ratingInfo) => isset($ratingInfo['rating']) && $ratingInfo['rating'] !== 'Not Found')) === 1) {
-                    $averageRating = floatval(str_replace(',', '.', current(array_filter($allRatings, fn($ratingInfo) => $ratingInfo['rating'] !== 'Not Found'))['rating']));
-                } else {
-                    throw new \Exception('All ratings are Not Found');
+                } elseif ($count === 0) {
+                    // Eğer sadece bir geçerli değer varsa onu al
+                    $filteredRatings = array_filter($allRatings, fn($ratingInfo) => isset($ratingInfo['rating']) && $ratingInfo['rating'] !== 'Not Found');
+                    if (count($filteredRatings) === 1) {
+                        $averageRating = floatval(str_replace(',', '.', current($filteredRatings)['rating']));
+                    } else {
+                        throw new \Exception('All ratings are Not Found');
+                    }
                 }
 
                 // Update the product's global rating in the database
