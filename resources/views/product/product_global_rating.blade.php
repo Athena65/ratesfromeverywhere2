@@ -67,7 +67,9 @@
         z-index: 5;
     }
 
-
+    .small-text {
+        font-size: 14px;
+    }
 </style>
 <!-- Global Rating -->
 <div class="d-flex justify-content-between align-items-center">
@@ -76,9 +78,9 @@
     </div>
     <div class="global-rating-container position-relative text-end">
         <button id="update-rating-{{ $product->id }}"
-                class="btn btn-primary position-absolute top-50 start-50 translate-middle d-none"
+                class="btn btn-primary position-absolute top-50 start-50 translate-middle d-none small-text"
                 data-product-name="{{ $product->name }}">
-            Update Global Rating
+            {{ __('messages.update_global_rating') }}
         </button>
 
         <!-- Loading Animation -->

@@ -80,4 +80,5 @@ return [
     'uploaded_image' => 'Eklenen Resim',
     'no_image_or_url_provided' => 'Resim eklenmemiş veya URL girilmemiş',
     'invalid_image_url'=> 'Geçersiz resim URL i',
+    'update_global_rating' => 'Genel Değerlendirmeyi güncelle',
 ];
