@@ -23,7 +23,7 @@ class ProductController extends Controller
         ->get()
             ->sortBy(function ($product) {
                 // Alt kategoriyi alfabetik olarak sıralama için kullan
-                return optional($product->subcategories->first())->name;
+                return $product->description;
             });
 
         // Her ürün için kullanıcının verdiği puanı ilişkilendirin
@@ -52,7 +52,7 @@ class ProductController extends Controller
         ->get()
             ->sortBy(function ($product) {
                 // Alt kategoriyi alfabetik olarak sıralama için kullan
-                return optional($product->subcategories->first())->name;
+                return $product->description;
             });
         // Okunmamış talepleri al
         // Talepleri yükleme
