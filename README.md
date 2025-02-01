@@ -28,13 +28,12 @@ The general architecture of the system is as follows:
 ![Admin Panel Categories](https://github.com/user-attachments/assets/aa8cac3b-cdc5-49b5-97da-b9ab3d60a468)
 ![Admin Panel Products](https://github.com/user-attachments/assets/3afbb37f-b3e2-4886-a4c9-5080801f0612)
 ![Main Screen](https://github.com/user-attachments/assets/01dc0c3d-7107-4df2-98c4-cd6483ba2d23)
-![Find Similar Interface](https://github.com/user-attachments/assets/8fceeac6-d97b-4503-a01f-7d5fe7c6379a)
 ![Model Plane Product Request](https://github.com/user-attachments/assets/7c34873f-a49d-4899-89f5-49ba31272f5d)
-![Rate Modal](https://github.com/user-attachments/assets/4214c20c-b26a-4418-ab76-af48ff3312b9)
 ![Request Add Product](https://github.com/user-attachments/assets/23d043f8-ffdb-4c97-93eb-6ff52f72cc84)
 ![Request Modal](https://github.com/user-attachments/assets/37d53ba0-94c4-4fbf-8577-472142ad36c7)
 ![Similar Products Found](https://github.com/user-attachments/assets/7178fe3f-716b-41da-8955-bb78912e1cf3)
 ![Product Details View](https://github.com/user-attachments/assets/18b26542-79fc-4cc9-b049-8f4157be6e79)
+![Ratemodal-productadd](https://github.com/user-attachments/assets/615a93ec-431c-444c-850e-83a83b9ec6a5)
 
 ---
 
