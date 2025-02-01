@@ -32,7 +32,6 @@ The general architecture of the system is as follows:
 ![Model Plane Product Request](https://github.com/user-attachments/assets/7c34873f-a49d-4899-89f5-49ba31272f5d)
 ![Rate Modal](https://github.com/user-attachments/assets/4214c20c-b26a-4418-ab76-af48ff3312b9)
 ![Request Add Product](https://github.com/user-attachments/assets/23d043f8-ffdb-4c97-93eb-6ff52f72cc84)
-![Request Message](https://github.com/user-attachments/assets/6832382f-80f0-4147-b624-0f1dee9f4fbb)
 ![Request Modal](https://github.com/user-attachments/assets/37d53ba0-94c4-4fbf-8577-472142ad36c7)
 ![Similar Products Found](https://github.com/user-attachments/assets/7178fe3f-716b-41da-8955-bb78912e1cf3)
 ![Product Details View](https://github.com/user-attachments/assets/18b26542-79fc-4cc9-b049-8f4157be6e79)
